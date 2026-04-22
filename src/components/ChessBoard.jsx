@@ -67,7 +67,7 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
   )
 }
 
-function Piece3D({ piece, position }) {
+function Piece3D({ piece, position, squareId, onClick }) {
   const symbol = getPieceSymbol(piece)
   if (!symbol) return null
 
@@ -80,6 +80,17 @@ function Piece3D({ piece, position }) {
       <Float speed={2.5} rotationIntensity={0} floatIntensity={0.5} floatingRange={[-0.05, 0.1]}>
         <Billboard>
           <Text
+            onClick={(e) => {
+              e.stopPropagation()
+              onClick(squareId)
+            }}
+            onPointerOver={(e) => {
+              e.stopPropagation()
+              document.body.style.cursor = 'pointer'
+            }}
+            onPointerOut={(e) => {
+              document.body.style.cursor = 'default'
+            }}
             fontSize={SQUARE_SIZE * 0.8}
             anchorX="center"
             anchorY="bottom"
@@ -163,6 +174,8 @@ export default function ChessBoard({
                     <Piece3D 
                       piece={piece} 
                       position={[x, 0.1, z]} 
+                      squareId={squareId}
+                      onClick={onSquareClick}
                     />
                   )}
                 </React.Fragment>
