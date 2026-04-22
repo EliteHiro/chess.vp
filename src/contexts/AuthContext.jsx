@@ -6,7 +6,8 @@ import {
   onAuthStateChanged,
   updateProfile
 } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { auth, db } from '../lib/firebase';
+import { ref, set } from 'firebase/database';
 
 const AuthContext = createContext();
 
@@ -22,6 +23,17 @@ export function AuthProvider({ children }) {
     if (!auth) throw new Error("Firebase Auth is not initialized. Please configure .env variables.");
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(userCredential.user, { displayName });
+    
+    // Save user profile to database
+    if (db) {
+      await set(ref(db, `users/${userCredential.user.uid}`), {
+        uid: userCredential.user.uid,
+        displayName: displayName,
+        email: email,
+        lastActive: Date.now()
+      });
+    }
+    
     return userCredential;
   }
 
