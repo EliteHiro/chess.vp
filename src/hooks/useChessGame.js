@@ -103,7 +103,6 @@ export default function useChessGame() {
           setMoveHistory(prev => [...prev, move])
           setLastMove({ from: selectedSquare, to: square })
           setSelectedSquare(null)
-          setGame(new Chess(game.fen()))
           return
         }
       }
@@ -132,7 +131,6 @@ export default function useChessGame() {
     if (move) {
       setMoveHistory(prev => [...prev, move])
       setLastMove({ from: pendingPromotion.from, to: pendingPromotion.to })
-      setGame(new Chess(game.fen()))
     }
 
     setPendingPromotion(null)
@@ -142,10 +140,17 @@ export default function useChessGame() {
   const undo = useCallback(() => {
     const move = game.undo()
     if (move) {
-      setMoveHistory(prev => prev.slice(0, -1))
+      setMoveHistory(prev => {
+        const newHistory = prev.slice(0, -1)
+        if (newHistory.length > 0) {
+          const last = newHistory[newHistory.length - 1]
+          setLastMove({ from: last.from, to: last.to })
+        } else {
+          setLastMove(null)
+        }
+        return newHistory
+      })
       setSelectedSquare(null)
-      setLastMove(null)
-      setGame(new Chess(game.fen()))
     }
   }, [game])
 
