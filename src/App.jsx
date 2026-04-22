@@ -7,12 +7,15 @@ import GamePage from './components/GamePage'
 import Footer from './components/Footer'
 import Lobby from './components/Lobby'
 
+import WelcomeOverlay from './components/WelcomeOverlay'
+
 function App() {
   return (
     <div className="app">
       <Routes>
         <Route path="/" element={
           <>
+            <WelcomeOverlay />
             <Header />
             <main>
               <HeroSection />
