@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../lib/firebase';
-import { ref, set, get, child, onValue, remove } from 'firebase/database';
+import { ref, set, get, child, onValue, remove, onDisconnect, serverTimestamp } from 'firebase/database';
 
 export default function Lobby() {
   const { currentUser } = useAuth();
@@ -13,31 +13,42 @@ export default function Lobby() {
   const [users, setUsers] = useState([]);
   const [incomingChallenge, setIncomingChallenge] = useState(null);
 
-  // If not logged in, redirect home
+  // If not logged in, redirect home and handle presence
   useEffect(() => {
     if (!currentUser) {
       navigate('/');
     } else if (db) {
-      // Ensure current user is in the users list
+      // Presence logic
       const userRef = ref(db, `users/${currentUser.uid}`);
+      
+      // Set to online when entering lobby
       set(userRef, {
         uid: currentUser.uid,
         displayName: currentUser.displayName || currentUser.email,
         email: currentUser.email,
-        lastActive: Date.now()
+        lastActive: serverTimestamp(),
+        status: 'online'
+      });
+
+      // Set to offline when disconnected
+      onDisconnect(userRef).update({
+        status: 'offline',
+        lastActive: serverTimestamp()
       });
     }
   }, [currentUser, navigate]);
 
-  // Fetch registered users
+  // Fetch registered users (online only)
   useEffect(() => {
     if (!db || !currentUser) return;
     const usersRef = ref(db, 'users');
     const unsubscribe = onValue(usersRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        // Filter out current user and convert to array
-        const usersList = Object.values(data).filter(user => user.uid !== currentUser.uid);
+        // Filter out current user AND only show online users
+        const usersList = Object.values(data).filter(user => 
+          user.uid !== currentUser.uid && user.status === 'online'
+        );
         setUsers(usersList);
       }
     });
@@ -297,13 +308,13 @@ export default function Lobby() {
           borderRadius: 'var(--radius-lg)', border: '1px solid #333',
           display: 'flex', flexDirection: 'column', gap: '1.5rem'
         }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', textAlign: 'center' }}>Registered Players</h2>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.5rem', textAlign: 'center' }}>Online Players</h2>
           <div style={{
             maxHeight: '400px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem',
             paddingRight: '0.5rem'
           }}>
             {users.length === 0 ? (
-              <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '2rem' }}>No other players registered yet.</p>
+              <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginTop: '2rem' }}>No other players are online right now.</p>
             ) : (
               users.map(user => (
                 <div key={user.uid} style={{
@@ -311,11 +322,12 @@ export default function Lobby() {
                   padding: '1rem', backgroundColor: 'rgba(255,255,255,0.05)',
                   borderRadius: 'var(--radius-md)', border: '1px solid #222'
                 }}>
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ fontWeight: 'bold' }}>{user.displayName || 'Anonymous'}</span>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
-                      Joined {new Date(user.lastActive).toLocaleDateString()}
-                    </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#4ade80', boxShadow: '0 0 8px #4ade80' }}></div>
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ fontWeight: 'bold' }}>{user.displayName || 'Anonymous'}</span>
+                      <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Online</span>
+                    </div>
                   </div>
                   <button 
                     className="btn" 
