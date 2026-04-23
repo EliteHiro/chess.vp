@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Chess } from 'chess.js';
 import { db } from '../lib/firebase';
-import { ref, onValue, set, get } from 'firebase/database';
+import { ref, onValue, set, get, push, serverTimestamp } from 'firebase/database';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function useOnlineChessGame(matchId) {
@@ -13,6 +13,7 @@ export default function useOnlineChessGame(matchId) {
   const [pendingPromotion, setPendingPromotion] = useState(null);
   const [matchData, setMatchData] = useState(null);
   const [playerColor, setPlayerColor] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
 
   // Sync from Firebase
   useEffect(() => {
@@ -42,6 +43,12 @@ export default function useOnlineChessGame(matchId) {
         if (data.lastMove) setLastMove(data.lastMove);
       } else if (data.fen && data.fen !== game.fen()) {
         setGame(new Chess(data.fen));
+      }
+
+      // Sync Chat
+      if (data.chat) {
+        const msgs = Object.values(data.chat).sort((a, b) => a.timestamp - b.timestamp);
+        setChatMessages(msgs);
       }
     });
 
@@ -175,6 +182,18 @@ export default function useOnlineChessGame(matchId) {
     setPendingPromotion(null);
   }, [game, pendingPromotion]);
 
+  const sendChatMessage = async (text) => {
+    if (!db || !matchId || !text.trim()) return;
+    const chatRef = ref(db, `matches/${matchId}/chat`);
+    const newMessageRef = push(chatRef);
+    await set(newMessageRef, {
+      senderId: currentUser.uid,
+      senderName: currentUser.displayName || currentUser.email,
+      text: text.trim(),
+      timestamp: serverTimestamp()
+    });
+  };
+
   // Undo is disabled in multiplayer, unless both agree (too complex for MVP). 
   // We'll just provide a no-op to satisfy the interface.
   const undo = useCallback(() => {}, []);
@@ -217,6 +236,8 @@ export default function useOnlineChessGame(matchId) {
     undo,
     reset,
     matchData,
-    playerColor
+    playerColor,
+    chatMessages,
+    sendChatMessage
   };
 }

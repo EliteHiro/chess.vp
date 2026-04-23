@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import useChessGame, { getPieceSymbol } from '../hooks/useChessGame'
 import useOnlineChessGame from '../hooks/useOnlineChessGame'
@@ -54,8 +55,13 @@ function GameLayout({
   onBack,
   onlineMatchId,
   matchData,
-  playerColor
+  playerColor,
+  chatMessages = [],
+  sendChatMessage
 }) {
+  const [chatInput, setChatInput] = useState('');
+  const chatEndRef = useRef(null);
+
   // Format move history into paired rows
   const moveRows = []
   for (let i = 0; i < moveHistory.length; i += 2) {
@@ -65,6 +71,18 @@ function GameLayout({
       black: moveHistory[i + 1]?.san || '',
     })
   }
+
+  // Auto-scroll chat to bottom
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  const handleSendChat = (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+    sendChatMessage(chatInput);
+    setChatInput('');
+  };
 
   // Get game status text
   const getStatusText = () => {
@@ -164,33 +182,56 @@ function GameLayout({
             )}
           </div>
 
-          {/* Captured Pieces */}
-          <div className="sidebar-section">
-            <div className="sidebar-section-title">Captured</div>
-            <div style={{ marginBottom: '0.5rem' }}>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '4px', letterSpacing: '1px' }}>
-                BY WHITE
+          {/* Chat Section (Online Only) */}
+          {onlineMatchId && (
+            <div className="sidebar-section" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
+              <div className="sidebar-section-title" style={{ padding: 'var(--space-lg)', paddingBottom: '0.5rem' }}>
+                Chat
               </div>
-              <div className="captured-pieces">
-                {capturedPieces.black.map((p, i) => (
-                  <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
-                ))}
+              <div className="chat-messages" style={{ 
+                flex: 1, overflowY: 'auto', padding: '1rem', display: 'flex', 
+                flexDirection: 'column', gap: '0.5rem', background: 'rgba(0,0,0,0.2)' 
+              }}>
+                {chatMessages.length === 0 ? (
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', opacity: 0.5, textAlign: 'center', marginTop: '2rem' }}>
+                    Say hello to your opponent!
+                  </div>
+                ) : (
+                  chatMessages.map((msg, i) => {
+                    return (
+                      <div key={i} style={{
+                        padding: '0.5rem 0.8rem', borderRadius: 'var(--radius-md)',
+                        fontSize: '0.85rem', maxWidth: '85%',
+                        alignSelf: 'flex-start',
+                        backgroundColor: '#222', border: '1px solid #333'
+                      }}>
+                        <div style={{ fontSize: '0.65rem', color: 'var(--accent-gold)', marginBottom: '2px' }}>{msg.senderName}</div>
+                        <div style={{ color: '#eee' }}>{msg.text}</div>
+                      </div>
+                    )
+                  })
+                )}
+                <div ref={chatEndRef} />
               </div>
+              <form onSubmit={handleSendChat} style={{ padding: '1rem', display: 'flex', gap: '0.5rem', borderTop: '1px solid #333' }}>
+                <input 
+                  type="text" 
+                  placeholder="Type a message..." 
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  style={{
+                    flex: 1, padding: '0.6rem 1rem', borderRadius: 'var(--radius-sm)',
+                    border: '1px solid #444', backgroundColor: 'var(--bg-primary)',
+                    color: 'white', fontSize: '0.85rem'
+                  }}
+                />
+                <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1rem' }}>Send</button>
+              </form>
             </div>
-            <div>
-              <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginBottom: '4px', letterSpacing: '1px' }}>
-                BY BLACK
-              </div>
-              <div className="captured-pieces">
-                {capturedPieces.white.map((p, i) => (
-                  <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
-                ))}
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Move History */}
-          <div className="sidebar-section" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
+          <div className="sidebar-section" style={{ flex: onlineMatchId ? 0.7 : 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
             <div className="sidebar-section-title" style={{ padding: 'var(--space-lg)', paddingBottom: '0.5rem' }}>
               Move History
             </div>
