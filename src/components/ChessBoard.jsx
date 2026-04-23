@@ -77,7 +77,7 @@ function Piece3D({ piece, position, squareId, onClick }) {
 
   return (
     <group position={position}>
-      <group position={[0, 0.15, 0]}>
+      <group position={[0, 0.4, 0]}>
         <Billboard>
           <Text
             onClick={(e) => {
@@ -93,7 +93,7 @@ function Piece3D({ piece, position, squareId, onClick }) {
             }}
             fontSize={SQUARE_SIZE * 0.8}
             anchorX="center"
-            anchorY="bottom"
+            anchorY="middle"
             position={[0, 0, 0]}
           >
             {symbol}
