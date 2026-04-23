@@ -77,7 +77,7 @@ function Piece3D({ piece, position, squareId, onClick }) {
 
   return (
     <group position={position}>
-      <Float speed={2.5} rotationIntensity={0} floatIntensity={0.5} floatingRange={[-0.05, 0.1]}>
+      <group position={[0, 0.15, 0]}>
         <Billboard>
           <Text
             onClick={(e) => {
@@ -100,7 +100,7 @@ function Piece3D({ piece, position, squareId, onClick }) {
             <meshBasicMaterial color={color} toneMapped={false} />
           </Text>
         </Billboard>
-      </Float>
+      </group>
     </group>
   )
 }
