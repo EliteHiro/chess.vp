@@ -67,43 +67,131 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 }
 
 function Piece3D({ piece, position, squareId, onClick }) {
-  const symbol = getPieceSymbol(piece)
-  if (!symbol) return null
-
   const isWhite = piece.color === 'w'
-  // Vibrant Disney colors
-  const color = isWhite ? '#ffffff' : '#4f46e5' // Pure white and Royal Blue
+  const color = isWhite ? '#ffffff' : '#3b82f6' 
+  
+  // Custom 3D representations using primitive shapes for a cartoonish look
+  const renderPieceModel = () => {
+    const type = piece.type.toLowerCase()
+    
+    // Glossy toy-like material
+    const materialProps = {
+      color: color,
+      roughness: 0.1,
+      metalness: 0.2,
+      emissive: color,
+      emissiveIntensity: 0.1
+    }
+
+    switch (type) {
+      case 'p': // Pawn: Sphere on top of a cylinder
+        return (
+          <group>
+            <mesh position={[0, 0.15, 0]}>
+              <cylinderGeometry args={[0.25, 0.35, 0.4, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.45, 0]}>
+              <sphereGeometry args={[0.2, 16, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+          </group>
+        )
+      case 'r': // Rook: Beveled box
+        return (
+          <group>
+            <mesh position={[0, 0.3, 0]}>
+              <boxGeometry args={[0.5, 0.6, 0.5]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.6, 0]}>
+              <boxGeometry args={[0.6, 0.1, 0.6]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+          </group>
+        )
+      case 'n': // Knight: L-shape or slanted block
+        return (
+          <group rotation={[0, isWhite ? Math.PI : 0, 0]}>
+            <mesh position={[0, 0.2, 0]}>
+              <cylinderGeometry args={[0.25, 0.35, 0.4, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.5, 0.1]} rotation={[-0.5, 0, 0]}>
+              <boxGeometry args={[0.35, 0.5, 0.3]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+          </group>
+        )
+      case 'b': // Bishop: Slender cylinder with pointed top
+        return (
+          <group>
+            <mesh position={[0, 0.35, 0]}>
+              <cylinderGeometry args={[0.15, 0.3, 0.7, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.7, 0]}>
+              <sphereGeometry args={[0.15, 16, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+          </group>
+        )
+      case 'q': // Queen: Crowned cylinder
+        return (
+          <group>
+            <mesh position={[0, 0.4, 0]}>
+              <cylinderGeometry args={[0.2, 0.35, 0.8, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.85, 0]}>
+              <torusGeometry args={[0.15, 0.05, 16, 32]} rotation={[Math.PI/2, 0, 0]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.95, 0]}>
+              <sphereGeometry args={[0.08, 16, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+          </group>
+        )
+      case 'k': // King: Tallest with a cross-like top
+        return (
+          <group>
+            <mesh position={[0, 0.45, 0]}>
+              <cylinderGeometry args={[0.2, 0.35, 1.0, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 1.0, 0]}>
+              <boxGeometry args={[0.15, 0.4, 0.15]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 1.05, 0]}>
+              <boxGeometry args={[0.4, 0.15, 0.15]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+          </group>
+        )
+      default:
+        return null
+    }
+  }
 
   return (
-    <group position={position}>
+    <group 
+      position={position}
+      onClick={(e) => {
+        e.stopPropagation()
+        onClick(squareId)
+      }}
+      onPointerOver={(e) => {
+        e.stopPropagation()
+        document.body.style.cursor = 'pointer'
+      }}
+      onPointerOut={(e) => {
+        document.body.style.cursor = 'default'
+      }}
+    >
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <Billboard>
-          <Text
-            onClick={(e) => {
-              e.stopPropagation()
-              onClick(squareId)
-            }}
-            onPointerOver={(e) => {
-              e.stopPropagation()
-              document.body.style.cursor = 'pointer'
-            }}
-            onPointerOut={(e) => {
-              document.body.style.cursor = 'default'
-            }}
-            fontSize={SQUARE_SIZE * 0.9}
-            anchorX="center"
-            anchorY="middle"
-            position={[0, 0.5, 0]}
-          >
-            {symbol}
-            <meshStandardMaterial 
-              color={color} 
-              emissive={color} 
-              emissiveIntensity={0.2}
-              roughness={0.3}
-            />
-          </Text>
-        </Billboard>
+        {renderPieceModel()}
       </Float>
     </group>
   )
