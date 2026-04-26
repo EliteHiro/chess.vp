@@ -27,11 +27,11 @@ export default function Header() {
           <span>VP</span>
         </Link>
 
-        <nav className="header-nav" id="desktop-nav" style={{ alignItems: 'center' }}>
+        <nav className="header-nav" id="desktop-nav" style={{ alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
           {currentUser ? (
             <>
-              <Link to="/lobby" className="header-nav-link">Play Online</Link>
-              <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginLeft: '1rem', marginRight: '1rem' }}>
+              <Link to="/lobby" className="header-nav-link" style={{ marginRight: '1rem' }}>Play Online</Link>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginRight: '1rem' }}>
                 {currentUser.displayName || currentUser.email}
               </div>
               <button className="btn" onClick={() => logout()} style={{ padding: '0.4rem 1rem', fontSize: '0.75rem', background: 'transparent', border: '1px solid #444', color: 'white' }}>

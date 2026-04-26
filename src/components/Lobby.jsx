@@ -20,7 +20,7 @@ export default function Lobby() {
     } else if (db) {
       // Presence logic
       const userRef = ref(db, `users/${currentUser.uid}`);
-      
+
       // Set to online when entering lobby
       set(userRef, {
         uid: currentUser.uid,
@@ -46,7 +46,7 @@ export default function Lobby() {
       const data = snapshot.val();
       if (data) {
         // Filter out current user AND only show online users
-        const usersList = Object.values(data).filter(user => 
+        const usersList = Object.values(data).filter(user =>
           user.uid !== currentUser.uid && user.status === 'online'
         );
         setUsers(usersList);
@@ -80,7 +80,7 @@ export default function Lobby() {
     try {
       if (!db) throw new Error("Firebase Database is not initialized.");
       const matchId = Math.random().toString(36).substring(2, 7).toUpperCase();
-      
+
       const matchRef = ref(db, `matches/${matchId}`);
       await set(matchRef, {
         status: 'waiting',
@@ -119,7 +119,7 @@ export default function Lobby() {
       const code = joinCode.trim().toUpperCase();
       const matchRef = ref(db, `matches/${code}`);
       const snapshot = await get(matchRef);
-      
+
       if (!snapshot.exists()) {
         setError('Match not found. Please check the code.');
         setLoading(false);
@@ -127,22 +127,22 @@ export default function Lobby() {
       }
 
       const matchData = snapshot.val();
-      
+
       if (matchData.status === 'waiting' && matchData.players.w !== currentUser.uid) {
         if (!matchData.players.b) {
           await set(ref(db, `matches/${code}/players/b`), currentUser.uid);
           await set(ref(db, `matches/${code}/status`), 'playing');
         } else if (matchData.players.b !== currentUser.uid) {
-           setError('Match is already full.');
-           setLoading(false);
-           return;
+          setError('Match is already full.');
+          setLoading(false);
+          return;
         }
       } else if (matchData.players.w !== currentUser.uid && matchData.players.b !== currentUser.uid) {
         setError('Match is already full.');
         setLoading(false);
         return;
       }
-      
+
       navigate(`/online/${code}`);
     } catch (err) {
       console.error(err);
@@ -164,7 +164,7 @@ export default function Lobby() {
         matchId: matchId,
         timestamp: Date.now()
       });
-      
+
       // Navigate to the match and wait
       navigate(`/online/${matchId}`);
     } catch (err) {
@@ -180,14 +180,14 @@ export default function Lobby() {
     setLoading(true);
     try {
       const { matchId, challengerUid } = incomingChallenge;
-      
+
       // Claim the black spot
       await set(ref(db, `matches/${matchId}/players/b`), currentUser.uid);
       await set(ref(db, `matches/${matchId}/status`), 'playing');
-      
+
       // Delete the challenge
       await remove(ref(db, `challenges/${currentUser.uid}/${challengerUid}`));
-      
+
       navigate(`/online/${matchId}`);
     } catch (err) {
       console.error(err);
@@ -213,7 +213,7 @@ export default function Lobby() {
       background: 'radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%)',
       overflowY: 'auto'
     }}>
-      
+
       {/* Challenge Notification Overlay */}
       {incomingChallenge && (
         <div style={{
@@ -242,7 +242,7 @@ export default function Lobby() {
       </p>
 
       <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', justifyContent: 'center', width: '100%', maxWidth: '1200px' }}>
-        
+
         <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
           {/* Create Game Section */}
           <div style={{
@@ -255,8 +255,8 @@ export default function Lobby() {
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Generate a new code to share with a friend.</p>
             </div>
             {error && <div style={{ color: '#ff6b6b', fontSize: '0.9rem' }}>{error}</div>}
-            <button 
-              className="btn btn-primary" 
+            <button
+              className="btn btn-primary"
               onClick={handleManualCreateMatch}
               disabled={loading}
               style={{ width: '100%', padding: '1rem' }}
@@ -276,9 +276,9 @@ export default function Lobby() {
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>Enter a match code to join a friend's game.</p>
             </div>
             <form onSubmit={handleJoinMatch} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <input 
-                type="text" 
-                placeholder="Enter Code" 
+              <input
+                type="text"
+                placeholder="Enter Code"
                 value={joinCode}
                 onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                 required
@@ -290,9 +290,9 @@ export default function Lobby() {
                   textAlign: 'center', letterSpacing: '4px'
                 }}
               />
-              <button 
-                type="submit" 
-                className="btn btn-secondary" 
+              <button
+                type="submit"
+                className="btn btn-secondary"
                 disabled={loading || !joinCode}
                 style={{ width: '100%', padding: '1rem' }}
               >
@@ -329,8 +329,8 @@ export default function Lobby() {
                       <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Online</span>
                     </div>
                   </div>
-                  <button 
-                    className="btn" 
+                  <button
+                    className="btn"
                     onClick={() => handleChallengeUser(user.uid)}
                     disabled={loading}
                     style={{
@@ -349,7 +349,7 @@ export default function Lobby() {
       </div>
 
       <div style={{ marginTop: '4rem' }}>
-        <button 
+        <button
           onClick={() => navigate('/')}
           className="btn"
           style={{ background: 'transparent', border: '1px solid #444', color: 'white' }}
