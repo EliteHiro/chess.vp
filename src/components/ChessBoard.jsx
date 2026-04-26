@@ -13,7 +13,7 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // Bright, toy-like colors for the board
+  // Bright, toy-like colors for the board squares
   const baseColor = isLight ? '#fdfcf0' : '#3b82f6'
   let color = baseColor
   
@@ -137,22 +137,24 @@ export default function ChessBoard({
         camera={{ position: [0, 6, 8], fov: 45 }}
         style={{ background: 'transparent' }}
       >
-        {/* Magical Sky Background */}
-        <color attach="background" args={['#e0f2fe']} />
-        <fog attach="fog" args={['#e0f2fe', 10, 25]} />
+        {/* Night Sky Background with Moon Glow */}
+        <color attach="background" args={['#020410']} />
+        <fog attach="fog" args={['#020410', 10, 25]} />
         
-        <Stars radius={100} depth={50} count={3000} factor={4} saturation={1} fade speed={2} />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0.5} fade speed={1.5} />
         
-        <ambientLight intensity={0.7} />
+        {/* Moon Glow */}
+        <pointLight position={[0, 10, -10]} color="#fff" intensity={2} />
+        <pointLight position={[-10, 5, 5]} color="#3b82f6" intensity={1} /> 
+
+        <ambientLight intensity={0.4} />
         <directionalLight 
           castShadow 
           position={[5, 10, 5]} 
           intensity={1} 
         />
-        <pointLight position={[-5, 5, -5]} color="#a855f7" intensity={2} /> 
-        <pointLight position={[5, -2, 5]} color="#f59e0b" intensity={1.5} /> 
         
-        <Environment preset="park" />
+        <Environment preset="night" />
 
         <group position={[0, 0, 0]}>
           {RANKS.map((rank, rowIndex) =>
@@ -200,7 +202,7 @@ export default function ChessBoard({
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.55, 0]} opacity={0.4} scale={20} blur={2} far={4} color="#3b82f6" />
+        <ContactShadows position={[0, -0.55, 0]} opacity={0.6} scale={20} blur={2} far={4} color="#000" />
 
         <OrbitControls 
           enablePan={false}
@@ -211,7 +213,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={1.2} mipmapBlur intensity={0.5} />
+          <Bloom luminanceThreshold={1.2} mipmapBlur intensity={1.2} />
         </EffectComposer>
       </Canvas>
     </div>
