@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
 
 export default function WelcomeOverlay({ onComplete }) {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
+    // Check if seen in current session
+    const hasSeen = sessionStorage.getItem('welcomeSeen');
+    if (!hasSeen) {
+      setIsVisible(true);
+    }
+
     // Reveal the button slightly after the text
     const timer = setTimeout(() => {
       setShowButton(true);
@@ -14,6 +20,7 @@ export default function WelcomeOverlay({ onComplete }) {
   }, []);
 
   const handleContinue = () => {
+    sessionStorage.setItem('welcomeSeen', 'true');
     setIsFadingOut(true);
     setTimeout(() => {
       setIsVisible(false);
