@@ -92,6 +92,50 @@ body {
   overflow: hidden;
 }
 
+/* ===== HEADER ===== */
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4rem;
+  z-index: 1000;
+  background: transparent;
+}
+
+.header-logo {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: white;
+  letter-spacing: -1px;
+}
+
+.logo-dot {
+  color: var(--accent-gold);
+}
+
+.header-nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.header-nav-link {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+
+.header-nav-link:hover {
+  color: white;
+}
+
 /* ===== HERO SECTION ===== */
 .hero {
   position: relative;
@@ -114,7 +158,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.5; /* Darker background for visibility */
+  opacity: 0.5;
 }
 
 .hero-overlay {
@@ -144,7 +188,7 @@ body {
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   font-weight: 800;
   color: white;
   margin-bottom: 1rem;
@@ -188,6 +232,7 @@ body {
 .sidebar-section {
   padding: 2rem;
   border-bottom: 1px solid var(--border-subtle);
+  text-align: center; /* Centered text for the sidebar sections */
 }
 
 .sidebar-section-title {
@@ -197,6 +242,7 @@ body {
   letter-spacing: 1px;
   color: var(--text-secondary);
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .turn-indicator {
@@ -206,6 +252,7 @@ body {
   background: rgba(255, 255, 255, 0.02);
   display: flex;
   align-items: center;
+  justify-content: center; /* Center content in turn indicator */
   gap: 1rem;
 }
 
@@ -218,22 +265,36 @@ body {
   flex: 1;
   overflow-y: auto;
   padding: 1.5rem;
+  text-align: center; /* Centered move notation */
 }
+
+.move-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.9rem;
+  align-items: center;
+}
+
+.move-number { color: var(--text-secondary); }
 
 .game-actions {
   padding: 2rem;
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column; /* Stack buttons in sidebar */
+  gap: 0.8rem;
   background: rgba(0, 0, 0, 0.3);
 }
 
 .game-action-btn {
-  flex: 1;
-  padding: 0.8rem;
-  border-radius: var(--radius-sm);
+  width: 100%;
+  padding: 1rem;
+  border-radius: var(--radius-md);
   font-weight: 600;
   color: white;
   border: 1px solid var(--border-subtle);
   background: rgba(255, 255, 255, 0.05);
   cursor: pointer;
+  text-align: center;
 }
