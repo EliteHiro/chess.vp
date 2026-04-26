@@ -18,7 +18,6 @@ function App() {
             <Header />
             <main>
               <HeroSection />
-              <FeaturesSection />
             </main>
             <Footer />
           </>
