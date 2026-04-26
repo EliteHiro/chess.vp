@@ -38,7 +38,7 @@ export default function HeroSection() {
         </p>
         <div className="hero-buttons">
           <Link to="/local" className="btn btn-primary" id="hero-play-btn" style={{ textDecoration: 'none' }}>
-            Start Journey
+            Play Local
           </Link>
           {currentUser ? (
             <Link to="/lobby" className="btn btn-secondary" id="hero-online-btn" style={{ textDecoration: 'none', background: 'rgba(255,255,255,0.1)' }}>

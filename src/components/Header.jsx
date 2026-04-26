@@ -28,8 +28,6 @@ export default function Header() {
         </Link>
 
         <nav className="header-nav" id="desktop-nav" style={{ alignItems: 'center' }}>
-          <Link to="/local" className="header-nav-link">Play Local</Link>
-          
           {currentUser ? (
             <>
               <Link to="/lobby" className="header-nav-link">Play Online</Link>
