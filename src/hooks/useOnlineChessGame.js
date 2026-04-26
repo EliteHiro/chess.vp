@@ -56,13 +56,12 @@ export default function useOnlineChessGame(matchId) {
   }, [matchId, currentUser]);
 
   const board = useMemo(() => game.board(), [game]);
-  const turn = game.turn();
-  const inCheck = game.inCheck();
-  const isCheckmate = game.isCheckmate();
-  const isStalemate = game.isStalemate();
-  const isDraw = game.isDraw();
-  // Check both engine state and DB status to ensure game end is detected
-  const isGameOver = game.isGameOver() || matchData?.status === 'finished';
+  const turn = useMemo(() => game.turn(), [game]);
+  const inCheck = useMemo(() => game.inCheck(), [game]);
+  const isCheckmate = useMemo(() => game.isCheckmate(), [game]);
+  const isStalemate = useMemo(() => game.isStalemate(), [game]);
+  const isDraw = useMemo(() => game.isDraw(), [game]);
+  const isGameOver = useMemo(() => game.isGameOver() || matchData?.status === 'finished', [game, matchData]);
 
   const kingInCheckSquare = useMemo(() => {
     if (!inCheck) return null;

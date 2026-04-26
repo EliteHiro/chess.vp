@@ -20,13 +20,13 @@ export default function useChessGame() {
   const [lastMove, setLastMove] = useState(null)
   const [pendingPromotion, setPendingPromotion] = useState(null)
 
-  const board = useMemo(() => game.board(), [game, moveHistory])
-  const turn = game.turn() // 'w' or 'b'
-  const inCheck = game.inCheck()
-  const isCheckmate = game.isCheckmate()
-  const isStalemate = game.isStalemate()
-  const isDraw = game.isDraw()
-  const isGameOver = game.isGameOver()
+  const board = useMemo(() => game.board(), [game])
+  const turn = useMemo(() => game.turn(), [game])
+  const inCheck = useMemo(() => game.inCheck(), [game])
+  const isCheckmate = useMemo(() => game.isCheckmate(), [game])
+  const isStalemate = useMemo(() => game.isStalemate(), [game])
+  const isDraw = useMemo(() => game.isDraw(), [game])
+  const isGameOver = useMemo(() => game.isGameOver(), [game])
 
   // Find the king's position if in check
   const kingInCheckSquare = useMemo(() => {
