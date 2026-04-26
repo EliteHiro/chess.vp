@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Text, Billboard, Environment, ContactShadows, Float } from '@react-three/drei'
+import { OrbitControls, Text, Billboard, Environment, ContactShadows, Stars, Float } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
 import { getPieceSymbol } from '../hooks/useChessGame'
 
@@ -133,20 +133,22 @@ export default function ChessBoard({
         camera={{ position: [0, 6, 8], fov: 45 }}
         style={{ background: 'transparent' }}
       >
-        <color attach="background" args={['#07080f']} />
-        <fog attach="fog" args={['#07080f', 10, 20]} />
+        <color attach="background" args={['#020408']} />
+        <fog attach="fog" args={['#020408', 12, 25]} />
         
-        <ambientLight intensity={0.5} />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1.5} />
+        
+        <ambientLight intensity={0.3} />
         <directionalLight 
           castShadow 
           position={[5, 10, 5]} 
-          intensity={1.5} 
+          intensity={1} 
           shadow-mapSize={[1024, 1024]}
         />
-        <pointLight position={[-5, 5, -5]} color="#06b6d4" intensity={2} />
+        <pointLight position={[-5, 5, -5]} color="#7e22ce" intensity={2} /> 
+        <pointLight position={[5, -2, 5]} color="#0369a1" intensity={1.5} /> 
         
-        {/* Environment for metallic reflections */}
-        <Environment preset="city" />
+        <Environment preset="night" />
 
         <group position={[0, 0, 0]}>
           {RANKS.map((rank, rowIndex) =>
@@ -183,7 +185,6 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Board Base / Frame */}
           <mesh position={[0, -0.3, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.4, 0.2, SQUARE_SIZE * 8.4]} />
             <meshStandardMaterial color="#0a0a0a" metalness={0.9} roughness={0.1} />
@@ -194,7 +195,6 @@ export default function ChessBoard({
           </mesh>
         </group>
 
-        {/* Fancy Shadows */}
         <ContactShadows position={[0, -0.45, 0]} opacity={0.8} scale={15} blur={2} far={4} color="#000000" />
 
         <OrbitControls 

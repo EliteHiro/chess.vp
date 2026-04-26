@@ -60,6 +60,7 @@ function GameLayout({
   sendChatMessage
 }) {
   const [chatInput, setChatInput] = useState('');
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const chatEndRef = useRef(null);
 
   // Format move history into paired rows
@@ -74,8 +75,10 @@ function GameLayout({
 
   // Auto-scroll chat to bottom
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessages]);
+    if (isChatOpen) {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, isChatOpen]);
 
   const handleSendChat = (e) => {
     e.preventDefault();
@@ -108,7 +111,7 @@ function GameLayout({
   const statusText = getStatusText()
 
   return (
-    <div className="game-page" id="game-page">
+    <div className="game-page" id="game-page" style={{ position: 'relative' }}>
       {/* Game Header */}
       <div className="game-header">
         <button
@@ -154,7 +157,7 @@ function GameLayout({
             getValidMoves={getValidMoves}
             onSquareClick={handleSquareClick}
             isGameOver={isGameOver}
-            cameraPerspective={playerColor === 'b' ? 'b' : 'w'} // Optional prop support later
+            cameraPerspective={playerColor === 'b' ? 'b' : 'w'}
           />
         </div>
 
@@ -182,56 +185,8 @@ function GameLayout({
             )}
           </div>
 
-          {/* Chat Section (Online Only) */}
-          {onlineMatchId && (
-            <div className="sidebar-section" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
-              <div className="sidebar-section-title" style={{ padding: 'var(--space-lg)', paddingBottom: '0.5rem' }}>
-                Chat
-              </div>
-              <div className="chat-messages" style={{ 
-                flex: 1, overflowY: 'auto', padding: '1rem', display: 'flex', 
-                flexDirection: 'column', gap: '0.5rem', background: 'rgba(0,0,0,0.2)' 
-              }}>
-                {chatMessages.length === 0 ? (
-                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', opacity: 0.5, textAlign: 'center', marginTop: '2rem' }}>
-                    Say hello to your opponent!
-                  </div>
-                ) : (
-                  chatMessages.map((msg, i) => {
-                    return (
-                      <div key={i} style={{
-                        padding: '0.5rem 0.8rem', borderRadius: 'var(--radius-md)',
-                        fontSize: '0.85rem', maxWidth: '85%',
-                        alignSelf: 'flex-start',
-                        backgroundColor: '#222', border: '1px solid #333'
-                      }}>
-                        <div style={{ fontSize: '0.65rem', color: 'var(--accent-gold)', marginBottom: '2px' }}>{msg.senderName}</div>
-                        <div style={{ color: '#eee' }}>{msg.text}</div>
-                      </div>
-                    )
-                  })
-                )}
-                <div ref={chatEndRef} />
-              </div>
-              <form onSubmit={handleSendChat} style={{ padding: '1rem', display: 'flex', gap: '0.5rem', borderTop: '1px solid #333' }}>
-                <input 
-                  type="text" 
-                  placeholder="Type a message..." 
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  style={{
-                    flex: 1, padding: '0.6rem 1rem', borderRadius: 'var(--radius-sm)',
-                    border: '1px solid #444', backgroundColor: 'var(--bg-primary)',
-                    color: 'white', fontSize: '0.85rem'
-                  }}
-                />
-                <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1rem' }}>Send</button>
-              </form>
-            </div>
-          )}
-
           {/* Move History */}
-          <div className="sidebar-section" style={{ flex: onlineMatchId ? 0.7 : 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
+          <div className="sidebar-section" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', padding: 0 }}>
             <div className="sidebar-section-title" style={{ padding: 'var(--space-lg)', paddingBottom: '0.5rem' }}>
               Move History
             </div>
@@ -251,6 +206,19 @@ function GameLayout({
                     {row.black}
                   </span>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Captured Pieces */}
+          <div className="sidebar-section">
+            <div className="sidebar-section-title">Captured</div>
+            <div className="captured-pieces">
+              {capturedPieces.black.map((p, i) => (
+                <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
+              ))}
+              {capturedPieces.white.map((p, i) => (
+                <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
               ))}
             </div>
           </div>
@@ -285,6 +253,81 @@ function GameLayout({
           </div>
         </div>
       </div>
+
+      {/* Floating Chat Button (Online Only) */}
+      {onlineMatchId && (
+        <button 
+          onClick={() => setIsChatOpen(!isChatOpen)}
+          style={{
+            position: 'fixed', bottom: '2rem', right: '2rem',
+            width: '60px', height: '60px', borderRadius: '50%',
+            backgroundColor: 'var(--primary)', color: 'white',
+            border: 'none', cursor: 'pointer', zIndex: 1000,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+            display: 'flex', alignItems: 'center', justifySelf: 'center', justifyContent: 'center',
+            fontSize: '1.5rem', transition: 'transform 0.2s'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          {isChatOpen ? '✕' : '💬'}
+        </button>
+      )}
+
+      {/* Chat Popup */}
+      {onlineMatchId && isChatOpen && (
+        <div style={{
+          position: 'fixed', bottom: '6rem', right: '2rem',
+          width: '320px', height: '400px',
+          backgroundColor: 'rgba(15, 15, 20, 0.95)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--primary-glow)',
+          display: 'flex', flexDirection: 'column',
+          zIndex: 1000, overflow: 'hidden',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.8)'
+        }}>
+          <div style={{ padding: '1rem', borderBottom: '1px solid #333', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontWeight: 'bold', color: 'var(--primary)' }}>Match Chat</span>
+            <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>Opponent: {matchData?.players?.w === playerColor ? 'Black' : 'White'}</span>
+          </div>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+            {chatMessages.length === 0 ? (
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', opacity: 0.5, textAlign: 'center', marginTop: '2rem' }}>
+                Say hello!
+              </div>
+            ) : (
+              chatMessages.map((msg, i) => (
+                <div key={i} style={{
+                  padding: '0.6rem 0.9rem', borderRadius: 'var(--radius-md)',
+                  fontSize: '0.85rem', maxWidth: '85%',
+                  alignSelf: msg.senderId === matchData?.players?.[playerColor] ? 'flex-end' : 'flex-start',
+                  backgroundColor: msg.senderId === matchData?.players?.[playerColor] ? 'rgba(126, 34, 206, 0.3)' : '#222',
+                  border: msg.senderId === matchData?.players?.[playerColor] ? '1px solid var(--primary)' : '1px solid #333'
+                }}>
+                  <div style={{ fontSize: '0.6rem', color: 'var(--accent-gold)', marginBottom: '2px' }}>{msg.senderName}</div>
+                  <div style={{ color: '#eee' }}>{msg.text}</div>
+                </div>
+              ))
+            )}
+            <div ref={chatEndRef} />
+          </div>
+          <form onSubmit={handleSendChat} style={{ padding: '1rem', display: 'flex', gap: '0.5rem', borderTop: '1px solid #333' }}>
+            <input 
+              type="text" 
+              placeholder="Message..." 
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              style={{
+                flex: 1, padding: '0.6rem 1rem', borderRadius: 'var(--radius-sm)',
+                border: '1px solid #444', backgroundColor: 'var(--bg-primary)',
+                color: 'white', fontSize: '0.85rem'
+              }}
+            />
+            <button type="submit" className="btn btn-primary" style={{ padding: '0.6rem 1rem' }}>Send</button>
+          </form>
+        </div>
+      )}
 
       {/* Promotion Modal */}
       {pendingPromotion && (
