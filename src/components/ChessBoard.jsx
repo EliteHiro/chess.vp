@@ -74,16 +74,31 @@ function Piece3D({ piece, position, squareId, onClick }) {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: 0.1,
-      metalness: 0.3,
+      roughness: 0.05,
+      metalness: 0.4,
       emissive: color,
-      emissiveIntensity: 0.05
+      emissiveIntensity: 0.1,
+      envMapIntensity: 1.5
     }
 
-    // Common Base for all pieces
+    // High-quality beveled base
     const PieceBase = () => (
-      <mesh position={[0, 0.05, 0]}>
-        <cylinderGeometry args={[0.3, 0.35, 0.1, 32]} />
+      <group>
+        <mesh position={[0, 0.02, 0]}>
+          <cylinderGeometry args={[0.35, 0.38, 0.05, 32]} />
+          <meshStandardMaterial {...materialProps} />
+        </mesh>
+        <mesh position={[0, 0.08, 0]}>
+          <cylinderGeometry args={[0.28, 0.35, 0.08, 32]} />
+          <meshStandardMaterial {...materialProps} />
+        </mesh>
+      </group>
+    )
+
+    // Neck ring detail for a premium look
+    const NeckRing = ({ y }) => (
+      <mesh position={[0, y, 0]}>
+        <torusGeometry args={[0.18, 0.03, 16, 32]} rotation={[Math.PI/2, 0, 0]} />
         <meshStandardMaterial {...materialProps} />
       </mesh>
     )
@@ -93,12 +108,13 @@ function Piece3D({ piece, position, squareId, onClick }) {
         return (
           <group>
             <PieceBase />
-            <mesh position={[0, 0.2, 0]}>
-              <cylinderGeometry args={[0.15, 0.25, 0.3, 16]} />
+            <mesh position={[0, 0.25, 0]}>
+              <cylinderGeometry args={[0.12, 0.28, 0.4, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.4, 0]}>
-              <sphereGeometry args={[0.18, 16, 16]} />
+            <NeckRing y={0.45} />
+            <mesh position={[0, 0.55, 0]}>
+              <sphereGeometry args={[0.22, 32, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
@@ -107,36 +123,48 @@ function Piece3D({ piece, position, squareId, onClick }) {
         return (
           <group>
             <PieceBase />
-            <mesh position={[0, 0.25, 0]}>
-              <cylinderGeometry args={[0.22, 0.28, 0.4, 16]} />
+            <mesh position={[0, 0.3, 0]}>
+              <cylinderGeometry args={[0.22, 0.28, 0.5, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.5, 0]}>
-              <cylinderGeometry args={[0.3, 0.3, 0.15, 16]} />
+            <NeckRing y={0.55} />
+            <mesh position={[0, 0.7, 0]}>
+              <cylinderGeometry args={[0.32, 0.32, 0.25, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            {/* Crenellations */}
-            <mesh position={[0, 0.58, 0]}>
-              <torusGeometry args={[0.22, 0.05, 8, 4]} rotation={[Math.PI/2, 0, Math.PI/4]} />
-              <meshStandardMaterial {...materialProps} />
+            {/* Top indent */}
+            <mesh position={[0, 0.8, 0]}>
+              <cylinderGeometry args={[0.22, 0.22, 0.05, 32]} />
+              <meshStandardMaterial color="#000" />
             </mesh>
           </group>
         )
-      case 'n': // Knight
+      case 'n': // Knight (Character-style)
         return (
           <group rotation={[0, isWhite ? Math.PI : 0, 0]}>
             <PieceBase />
             <mesh position={[0, 0.25, 0]}>
-              <cylinderGeometry args={[0.2, 0.28, 0.4, 16]} />
+              <cylinderGeometry args={[0.18, 0.28, 0.4, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            {/* Horse Head Shape */}
-            <mesh position={[0, 0.5, 0.1]} rotation={[-0.4, 0, 0]}>
-              <boxGeometry args={[0.25, 0.4, 0.35]} />
+            <NeckRing y={0.45} />
+            {/* Horse body */}
+            <mesh position={[0, 0.65, 0.1]} rotation={[-0.4, 0, 0]}>
+              <boxGeometry args={[0.28, 0.5, 0.4]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.65, 0.25]} rotation={[-0.8, 0, 0]}>
-              <boxGeometry args={[0.2, 0.25, 0.3]} />
+            {/* Muzzle */}
+            <mesh position={[0, 0.85, 0.3]} rotation={[-0.8, 0, 0]}>
+              <boxGeometry args={[0.22, 0.25, 0.45]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            {/* Ears */}
+            <mesh position={[0.1, 1.0, 0.1]}>
+              <boxGeometry args={[0.05, 0.15, 0.05]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[-0.1, 1.0, 0.1]}>
+              <boxGeometry args={[0.05, 0.15, 0.05]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
@@ -145,16 +173,17 @@ function Piece3D({ piece, position, squareId, onClick }) {
         return (
           <group>
             <PieceBase />
-            <mesh position={[0, 0.3, 0]}>
-              <cylinderGeometry args={[0.15, 0.25, 0.5, 16]} />
+            <mesh position={[0, 0.35, 0]}>
+              <cylinderGeometry args={[0.12, 0.25, 0.6, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.65, 0]} rotation={[0, 0, 0.2]}>
-              <sphereGeometry args={[0.18, 16, 16]} scale={[0.8, 1.2, 0.8]} />
+            <NeckRing y={0.65} />
+            <mesh position={[0, 0.85, 0]} rotation={[0, 0, 0.2]}>
+              <sphereGeometry args={[0.2, 32, 32]} scale={[0.85, 1.3, 0.85]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.8, 0]}>
-              <sphereGeometry args={[0.05, 8, 8]} />
+            <mesh position={[0, 1.1, 0]}>
+              <sphereGeometry args={[0.06, 16, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
@@ -163,16 +192,17 @@ function Piece3D({ piece, position, squareId, onClick }) {
         return (
           <group>
             <PieceBase />
-            <mesh position={[0, 0.4, 0]}>
-              <cylinderGeometry args={[0.18, 0.3, 0.8, 16]} />
+            <mesh position={[0, 0.45, 0]}>
+              <cylinderGeometry args={[0.15, 0.28, 0.9, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.85, 0]}>
-              <cylinderGeometry args={[0.3, 0.15, 0.2, 16]} />
+            <NeckRing y={0.9} />
+            <mesh position={[0, 1.05, 0]}>
+              <cylinderGeometry args={[0.35, 0.18, 0.25, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.95, 0]}>
-              <sphereGeometry args={[0.1, 16, 16]} />
+            <mesh position={[0, 1.2, 0]}>
+              <sphereGeometry args={[0.12, 32, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
@@ -181,21 +211,22 @@ function Piece3D({ piece, position, squareId, onClick }) {
         return (
           <group>
             <PieceBase />
-            <mesh position={[0, 0.45, 0]}>
-              <cylinderGeometry args={[0.2, 0.32, 0.9, 16]} />
+            <mesh position={[0, 0.5, 0]}>
+              <cylinderGeometry args={[0.18, 0.3, 1.0, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.95, 0]}>
-              <cylinderGeometry args={[0.35, 0.2, 0.15, 16]} />
-              <meshStandardMaterial {...materialProps} />
-            </mesh>
-            {/* Cross */}
+            <NeckRing y={1.0} />
             <mesh position={[0, 1.15, 0]}>
-              <boxGeometry args={[0.1, 0.3, 0.1]} />
+              <cylinderGeometry args={[0.4, 0.22, 0.2, 32]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 1.2, 0]}>
-              <boxGeometry args={[0.25, 0.1, 0.1]} />
+            {/* Ornate Cross */}
+            <mesh position={[0, 1.4, 0]}>
+              <boxGeometry args={[0.1, 0.4, 0.1]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 1.45, 0]}>
+              <boxGeometry args={[0.3, 0.1, 0.1]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
