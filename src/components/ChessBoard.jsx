@@ -144,33 +144,6 @@ export default function ChessBoard({
         {/* Twinkling Galaxy Stars */}
         <Stars radius={100} depth={50} count={8000} factor={7} saturation={1} fade speed={3} />
         
-        {/* Cartoonish Nebula Clouds */}
-        <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-          <mesh position={[-12, 5, -15]}>
-            <sphereGeometry args={[4, 32, 32]} />
-            <meshStandardMaterial 
-              color="#a855f7" 
-              emissive="#a855f7" 
-              emissiveIntensity={2} 
-              transparent 
-              opacity={0.4}
-            />
-          </mesh>
-        </Float>
-        
-        <Float speed={3} rotationIntensity={0.2} floatIntensity={1.5}>
-          <mesh position={[12, -3, -10]}>
-            <sphereGeometry args={[5, 32, 32]} />
-            <meshStandardMaterial 
-              color="#ec4899" 
-              emissive="#ec4899" 
-              emissiveIntensity={1.5} 
-              transparent 
-              opacity={0.3}
-            />
-          </mesh>
-        </Float>
-
         {/* Galactic Center / Wormhole Glow */}
         <pointLight position={[0, 0, -20]} color="#06b6d4" intensity={5} />
         <pointLight position={[10, 5, -5]} color="#ec4899" intensity={2} /> 
