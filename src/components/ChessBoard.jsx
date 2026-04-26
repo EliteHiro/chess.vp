@@ -70,102 +70,132 @@ function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
   const color = isWhite ? '#ffffff' : '#3b82f6' 
   
-  // Custom 3D representations using primitive shapes for a cartoonish look
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
-    
-    // Glossy toy-like material
     const materialProps = {
       color: color,
       roughness: 0.1,
-      metalness: 0.2,
+      metalness: 0.3,
       emissive: color,
-      emissiveIntensity: 0.1
+      emissiveIntensity: 0.05
     }
 
+    // Common Base for all pieces
+    const PieceBase = () => (
+      <mesh position={[0, 0.05, 0]}>
+        <cylinderGeometry args={[0.3, 0.35, 0.1, 32]} />
+        <meshStandardMaterial {...materialProps} />
+      </mesh>
+    )
+
     switch (type) {
-      case 'p': // Pawn: Sphere on top of a cylinder
+      case 'p': // Pawn
         return (
           <group>
-            <mesh position={[0, 0.15, 0]}>
-              <cylinderGeometry args={[0.25, 0.35, 0.4, 16]} />
+            <PieceBase />
+            <mesh position={[0, 0.2, 0]}>
+              <cylinderGeometry args={[0.15, 0.25, 0.3, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.45, 0]}>
-              <sphereGeometry args={[0.2, 16, 16]} />
+            <mesh position={[0, 0.4, 0]}>
+              <sphereGeometry args={[0.18, 16, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
         )
-      case 'r': // Rook: Beveled box
+      case 'r': // Rook
         return (
           <group>
-            <mesh position={[0, 0.3, 0]}>
-              <boxGeometry args={[0.5, 0.6, 0.5]} />
+            <PieceBase />
+            <mesh position={[0, 0.25, 0]}>
+              <cylinderGeometry args={[0.22, 0.28, 0.4, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.6, 0]}>
-              <boxGeometry args={[0.6, 0.1, 0.6]} />
+            <mesh position={[0, 0.5, 0]}>
+              <cylinderGeometry args={[0.3, 0.3, 0.15, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            {/* Crenellations */}
+            <mesh position={[0, 0.58, 0]}>
+              <torusGeometry args={[0.22, 0.05, 8, 4]} rotation={[Math.PI/2, 0, Math.PI/4]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
         )
-      case 'n': // Knight: L-shape or slanted block
+      case 'n': // Knight
         return (
           <group rotation={[0, isWhite ? Math.PI : 0, 0]}>
-            <mesh position={[0, 0.2, 0]}>
-              <cylinderGeometry args={[0.25, 0.35, 0.4, 16]} />
+            <PieceBase />
+            <mesh position={[0, 0.25, 0]}>
+              <cylinderGeometry args={[0.2, 0.28, 0.4, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 0.5, 0.1]} rotation={[-0.5, 0, 0]}>
-              <boxGeometry args={[0.35, 0.5, 0.3]} />
+            {/* Horse Head Shape */}
+            <mesh position={[0, 0.5, 0.1]} rotation={[-0.4, 0, 0]}>
+              <boxGeometry args={[0.25, 0.4, 0.35]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-          </group>
-        )
-      case 'b': // Bishop: Slender cylinder with pointed top
-        return (
-          <group>
-            <mesh position={[0, 0.35, 0]}>
-              <cylinderGeometry args={[0.15, 0.3, 0.7, 16]} />
-              <meshStandardMaterial {...materialProps} />
-            </mesh>
-            <mesh position={[0, 0.7, 0]}>
-              <sphereGeometry args={[0.15, 16, 16]} />
+            <mesh position={[0, 0.65, 0.25]} rotation={[-0.8, 0, 0]}>
+              <boxGeometry args={[0.2, 0.25, 0.3]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
         )
-      case 'q': // Queen: Crowned cylinder
+      case 'b': // Bishop
         return (
           <group>
+            <PieceBase />
+            <mesh position={[0, 0.3, 0]}>
+              <cylinderGeometry args={[0.15, 0.25, 0.5, 16]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.65, 0]} rotation={[0, 0, 0.2]}>
+              <sphereGeometry args={[0.18, 16, 16]} scale={[0.8, 1.2, 0.8]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 0.8, 0]}>
+              <sphereGeometry args={[0.05, 8, 8]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+          </group>
+        )
+      case 'q': // Queen
+        return (
+          <group>
+            <PieceBase />
             <mesh position={[0, 0.4, 0]}>
-              <cylinderGeometry args={[0.2, 0.35, 0.8, 16]} />
+              <cylinderGeometry args={[0.18, 0.3, 0.8, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
             <mesh position={[0, 0.85, 0]}>
-              <torusGeometry args={[0.15, 0.05, 16, 32]} rotation={[Math.PI/2, 0, 0]} />
+              <cylinderGeometry args={[0.3, 0.15, 0.2, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
             <mesh position={[0, 0.95, 0]}>
-              <sphereGeometry args={[0.08, 16, 16]} />
+              <sphereGeometry args={[0.1, 16, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
         )
-      case 'k': // King: Tallest with a cross-like top
+      case 'k': // King
         return (
           <group>
+            <PieceBase />
             <mesh position={[0, 0.45, 0]}>
-              <cylinderGeometry args={[0.2, 0.35, 1.0, 16]} />
+              <cylinderGeometry args={[0.2, 0.32, 0.9, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 1.0, 0]}>
-              <boxGeometry args={[0.15, 0.4, 0.15]} />
+            <mesh position={[0, 0.95, 0]}>
+              <cylinderGeometry args={[0.35, 0.2, 0.15, 16]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
-            <mesh position={[0, 1.05, 0]}>
-              <boxGeometry args={[0.4, 0.15, 0.15]} />
+            {/* Cross */}
+            <mesh position={[0, 1.15, 0]}>
+              <boxGeometry args={[0.1, 0.3, 0.1]} />
+              <meshStandardMaterial {...materialProps} />
+            </mesh>
+            <mesh position={[0, 1.2, 0]}>
+              <boxGeometry args={[0.25, 0.1, 0.1]} />
               <meshStandardMaterial {...materialProps} />
             </mesh>
           </group>
