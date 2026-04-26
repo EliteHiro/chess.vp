@@ -303,6 +303,7 @@ function GameLayout({
           turn={turn}
           onNewGame={reset}
           onGoHome={onBack}
+          playerColor={playerColor}
         />
       )}
     </div>

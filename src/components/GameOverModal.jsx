@@ -1,12 +1,23 @@
-export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, onNewGame, onGoHome }) {
+export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, onNewGame, onGoHome, playerColor }) {
   let icon = '🤝'
   let title = 'Draw'
   let message = 'The game ended in a draw.'
 
   if (isCheckmate) {
-    icon = '🏆'
-    title = 'Checkmate!'
-    message = `${turn === 'w' ? 'Black' : 'White'} wins the game!`
+    const winnerColor = turn === 'w' ? 'b' : 'w';
+    const won = playerColor === winnerColor;
+    
+    icon = won ? '🎉' : '💀'
+    title = won ? 'You Won!' : 'You Lost!'
+    message = won 
+      ? `Congratulations! You defeated your opponent by checkmate.`
+      : `Better luck next time. Your opponent won by checkmate.`
+
+    if (!playerColor || playerColor === 'spectator') {
+      icon = '🏆'
+      title = 'Checkmate!'
+      message = `${winnerColor === 'w' ? 'White' : 'Black'} wins the game!`
+    }
   } else if (isStalemate) {
     icon = '⚖️'
     title = 'Stalemate'
