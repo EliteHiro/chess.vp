@@ -100,6 +100,8 @@ export default function useChessGame() {
         // Make the move
         const move = game.move({ from: selectedSquare, to: square })
         if (move) {
+          const newGame = new Chess(game.fen())
+          setGame(newGame)
           setMoveHistory(prev => [...prev, move])
           setLastMove({ from: selectedSquare, to: square })
           setSelectedSquare(null)
@@ -116,7 +118,7 @@ export default function useChessGame() {
     if (piece && piece.color === turn) {
       setSelectedSquare(square)
     }
-  }, [game, selectedSquare, turn, isGameOver, pendingPromotion, moveHistory])
+  }, [game, selectedSquare, turn, isGameOver, pendingPromotion])
 
   // Handle promotion
   const handlePromotion = useCallback((promotionPiece) => {
@@ -129,6 +131,8 @@ export default function useChessGame() {
     })
 
     if (move) {
+      const newGame = new Chess(game.fen())
+      setGame(newGame)
       setMoveHistory(prev => [...prev, move])
       setLastMove({ from: pendingPromotion.from, to: pendingPromotion.to })
     }

@@ -61,7 +61,8 @@ export default function useOnlineChessGame(matchId) {
   const isCheckmate = game.isCheckmate();
   const isStalemate = game.isStalemate();
   const isDraw = game.isDraw();
-  const isGameOver = game.isGameOver();
+  // Check both engine state and DB status to ensure game end is detected
+  const isGameOver = game.isGameOver() || matchData?.status === 'finished';
 
   const kingInCheckSquare = useMemo(() => {
     if (!inCheck) return null;
