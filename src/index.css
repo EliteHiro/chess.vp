@@ -260,7 +260,7 @@ body {
 }
 
 .move-history {
-  flex: 1;
+  height: 220px; /* Fixed height to leave more space for others */
   overflow-y: auto;
   padding: 0.8rem;
 }
@@ -268,13 +268,30 @@ body {
 .move-row {
   display: grid;
   grid-template-columns: 30px 1fr 1fr;
-  padding: 0.3rem 0;
+  padding: 0.25rem 0;
   border-bottom: 1px solid rgba(255,255,255,0.03);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   align-items: center;
 }
 
 .move-number { color: var(--text-secondary); opacity: 0.5; }
+
+.captured-pieces {
+  flex: 1; /* Give captured pieces the remaining space */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  align-content: flex-start;
+  min-height: 120px;
+  padding: 1rem;
+}
+
+.captured-piece {
+  font-size: 1.5rem;
+  color: white;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
 
 .game-actions {
   padding: 1rem;
