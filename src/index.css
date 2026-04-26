@@ -8,41 +8,37 @@
 }
 
 :root {
-  /* Color Palette - Disney/Cartoonish */
-  --bg-primary: #f0f7ff;
-  --bg-secondary: #e0f2fe;
-  --bg-card: rgba(255, 255, 255, 0.95);
-  --bg-glass: rgba(255, 255, 255, 0.85);
+  /* Disney Palette - BRIGHT & BUBBLY */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f0f9ff;
+  --bg-card: #ffffff;
+  --bg-glass: rgba(255, 255, 255, 0.9);
   
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
   --text-accent: #3b82f6;
-  --text-heading: #1d4ed8;
+  --text-heading: #1e3a8a;
   
   --primary: #3b82f6;
-  --primary-glow: rgba(59, 130, 246, 0.3);
-  --accent-gold: #f59e0b;
-  --accent-gold-dim: rgba(245, 158, 11, 0.3);
-  --accent-purple: #a855f7;
-  --accent-pink: #ec4899;
+  --primary-glow: rgba(59, 130, 246, 0.2);
+  --accent-gold: #fbbf24;
+  --accent-gold-dim: rgba(251, 191, 36, 0.2);
   
-  --border-subtle: rgba(59, 130, 246, 0.15);
-  --border-glow: rgba(59, 130, 246, 0.4);
+  --border-subtle: #e2e8f0;
+  --border-glow: #3b82f6;
   
-  --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.15);
-  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 10px 25px rgba(59, 130, 246, 0.1);
+  --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.05);
   
-  /* Typography - Playful & Modern */
-  --font-display: 'Outfit', 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
   --font-body: 'Outfit', sans-serif;
   
-  /* Border Radius - Bubbly */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 30px;
+  --radius-xl: 40px;
   
-  --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 400ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 body {
@@ -50,151 +46,120 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
-  overflow-x: hidden;
-  min-height: 100vh;
 }
 
-/* ===== HERO SECTION ===== */
+/* ===== DISNEY HERO ===== */
 .hero {
-  position: relative;
-  width: 100%;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-}
-
-.hero-background {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
 }
 
 .hero-background img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.8;
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 50%,
-    rgba(255, 255, 255, 0.8) 100%
-  );
-  z-index: 1;
+  opacity: 1; /* Make it bright! */
 }
 
 .hero-content {
-  position: relative;
-  z-index: 3;
-  text-align: center;
-  max-width: 750px;
-  padding: 3rem;
-  background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  border: 4px solid white;
+  background: white;
+  padding: 4rem;
   border-radius: var(--radius-xl);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-  animation: heroPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 6px solid #e0f2fe;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+  text-align: center;
+  z-index: 10;
+  animation: bounceIn 1s;
 }
 
-@keyframes heroPop {
-  from { opacity: 0; transform: scale(0.8) translateY(30px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 .hero-title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: 4rem;
   font-weight: 800;
-  color: var(--text-heading);
-  letter-spacing: -1px;
+  color: #1e40af;
   margin-bottom: 1rem;
 }
 
-.hero-title .title-dot {
-  color: var(--accent-gold);
-}
-
 .hero-subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  color: var(--text-secondary);
-  margin-bottom: 2.5rem;
+  color: #64748b;
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
 }
 
 .btn {
-  padding: 1rem 2.5rem;
+  padding: 1.2rem 3rem;
   border-radius: 50px;
   font-weight: 700;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: #3b82f6;
   color: white;
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
 }
 
 .btn-primary:hover {
-  transform: scale(1.1) rotate(-1deg);
-  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+  transform: scale(1.1) rotate(-2deg);
 }
 
 .btn-secondary {
-  background: white;
-  color: var(--primary);
-  border: 2px solid var(--primary);
+  background: #f1f5f9;
+  color: #1e40af;
+  border: 3px solid #e0f2fe;
 }
 
 .btn-secondary:hover {
-  transform: scale(1.1) rotate(1deg);
-  background: var(--bg-secondary);
+  transform: scale(1.1) rotate(2deg);
 }
 
-/* ===== MODAL & POPUPS ===== */
-.modal {
-  border-radius: var(--radius-xl);
-  border: 4px solid white;
-  padding: 3rem;
+/* ===== HEADER ===== */
+.header {
+  height: 80px;
+  padding: 0 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
-.feature-card {
-  border-radius: var(--radius-lg);
-  border: 3px solid white;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+.header-logo {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1e40af;
 }
 
-.feature-card:hover {
-  transform: translateY(-10px) scale(1.05);
+/* ===== GAME PAGE ===== */
+.game-page {
+  background: #f8fafc;
 }
 
-/* ===== GAME PAGE SIDEBAR ===== */
 .game-sidebar {
   background: white;
-  border-left: 2px solid #e2e8f0;
-}
-
-.sidebar-section {
-  padding: 2rem;
-  border-bottom: 2px solid #f1f5f9;
+  border-left: 4px solid #f1f5f9;
 }
 
 .turn-indicator {
   border-radius: var(--radius-md);
-  border: 3px solid #f1f5f9;
-  background: white;
-}
-
-.turn-indicator.active {
-  border-color: var(--primary);
-  background: #eff6ff;
+  background: #f0f9ff;
+  border: 4px solid white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.02);
 }
