@@ -137,15 +137,28 @@ export default function ChessBoard({
         camera={{ position: [0, 6, 8], fov: 45 }}
         style={{ background: 'transparent' }}
       >
-        {/* Night Sky Background with Moon Glow */}
-        <color attach="background" args={['#020410']} />
-        <fog attach="fog" args={['#020410', 10, 25]} />
+        {/* Deep Magical Night Background */}
+        <color attach="background" args={['#050b1a']} />
+        <fog attach="fog" args={['#050b1a', 10, 25]} />
         
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0.5} fade speed={1.5} />
+        {/* Twinkling Cartoonish Stars */}
+        <Stars radius={100} depth={50} count={6000} factor={6} saturation={1} fade speed={2} />
         
-        {/* Moon Glow */}
-        <pointLight position={[0, 10, -10]} color="#fff" intensity={2} />
-        <pointLight position={[-10, 5, 5]} color="#3b82f6" intensity={1} /> 
+        {/* Cartoonish 3D Moon */}
+        <Float speed={1} rotationIntensity={0.1} floatIntensity={0.5}>
+          <mesh position={[10, 8, -15]}>
+            <sphereGeometry args={[2, 32, 32]} />
+            <meshStandardMaterial 
+              color="#fefce8" 
+              emissive="#fefce8" 
+              emissiveIntensity={1.5} 
+            />
+          </mesh>
+        </Float>
+
+        {/* Moon Glow for the Scene */}
+        <pointLight position={[10, 8, -15]} color="#fff" intensity={3} />
+        <pointLight position={[-10, 5, 5]} color="#3b82f6" intensity={1.5} /> 
 
         <ambientLight intensity={0.4} />
         <directionalLight 
