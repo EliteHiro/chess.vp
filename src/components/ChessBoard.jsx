@@ -13,13 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  const baseColor = isLight ? '#1a1d24' : '#0d0f14'
+  // Bright, toy-like colors for the board
+  const baseColor = isLight ? '#fdfcf0' : '#3b82f6'
   let color = baseColor
   
-  if (isSelected) color = '#4a3f1d' 
-  if (isLastMove) color = '#2c2919'
-  if (isCheck) color = '#4a1d1d'
-  if (hovered && !isSelected) color = isLight ? '#2a2f3d' : '#1e222d'
+  if (isSelected) color = '#f59e0b' 
+  if (isLastMove) color = '#93c5fd'
+  if (isCheck) color = '#ef4444'
+  if (hovered && !isSelected) color = isLight ? '#fff' : '#60a5fa'
 
   return (
     <group position={position}>
@@ -43,24 +44,22 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color} 
-          roughness={0.2} 
-          metalness={0.8}
+          roughness={0.1} 
+          metalness={0.1}
         />
       </mesh>
       
-      {/* Valid Move Indicator (Dot) */}
       {moveType === 'move' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.2, 32]} />
-          <meshBasicMaterial color={[1.5, 1.2, 0.2]} toneMapped={false} transparent opacity={0.8} />
+          <meshBasicMaterial color="#f59e0b" transparent opacity={0.8} />
         </mesh>
       )}
       
-      {/* Capture Indicator (Ring) */}
       {moveType === 'capture' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[SQUARE_SIZE/2 - 0.15, SQUARE_SIZE/2 - 0.05, 32]} />
-          <meshBasicMaterial color={[2, 0.2, 0.2]} toneMapped={false} transparent opacity={0.9} />
+          <meshBasicMaterial color="#ef4444" transparent opacity={0.9} />
         </mesh>
       )}
     </group>
@@ -72,12 +71,12 @@ function Piece3D({ piece, position, squareId, onClick }) {
   if (!symbol) return null
 
   const isWhite = piece.color === 'w'
-  // Glowing colors for Bloom
-  const color = isWhite ? [2, 2, 2] : [0.2, 0.8, 2.0] // White pieces glow white, Black pieces glow neon blue
+  // Vibrant Disney colors
+  const color = isWhite ? '#ffffff' : '#4f46e5' // Pure white and Royal Blue
 
   return (
     <group position={position}>
-      <group position={[0, 0.4, 0]}>
+      <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
         <Billboard>
           <Text
             onClick={(e) => {
@@ -91,16 +90,21 @@ function Piece3D({ piece, position, squareId, onClick }) {
             onPointerOut={(e) => {
               document.body.style.cursor = 'default'
             }}
-            fontSize={SQUARE_SIZE * 0.8}
+            fontSize={SQUARE_SIZE * 0.9}
             anchorX="center"
             anchorY="middle"
-            position={[0, 0, 0]}
+            position={[0, 0.5, 0]}
           >
             {symbol}
-            <meshBasicMaterial color={color} toneMapped={false} />
+            <meshStandardMaterial 
+              color={color} 
+              emissive={color} 
+              emissiveIntensity={0.2}
+              roughness={0.3}
+            />
           </Text>
         </Billboard>
-      </group>
+      </Float>
     </group>
   )
 }
@@ -133,22 +137,22 @@ export default function ChessBoard({
         camera={{ position: [0, 6, 8], fov: 45 }}
         style={{ background: 'transparent' }}
       >
-        <color attach="background" args={['#020408']} />
-        <fog attach="fog" args={['#020408', 12, 25]} />
+        {/* Magical Sky Background */}
+        <color attach="background" args={['#e0f2fe']} />
+        <fog attach="fog" args={['#e0f2fe', 10, 25]} />
         
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1.5} />
+        <Stars radius={100} depth={50} count={3000} factor={4} saturation={1} fade speed={2} />
         
-        <ambientLight intensity={0.3} />
+        <ambientLight intensity={0.7} />
         <directionalLight 
           castShadow 
           position={[5, 10, 5]} 
           intensity={1} 
-          shadow-mapSize={[1024, 1024]}
         />
-        <pointLight position={[-5, 5, -5]} color="#7e22ce" intensity={2} /> 
-        <pointLight position={[5, -2, 5]} color="#0369a1" intensity={1.5} /> 
+        <pointLight position={[-5, 5, -5]} color="#a855f7" intensity={2} /> 
+        <pointLight position={[5, -2, 5]} color="#f59e0b" intensity={1.5} /> 
         
-        <Environment preset="night" />
+        <Environment preset="park" />
 
         <group position={[0, 0, 0]}>
           {RANKS.map((rank, rowIndex) =>
@@ -185,17 +189,18 @@ export default function ChessBoard({
             })
           )}
           
+          {/* Whimsical Board Base */}
           <mesh position={[0, -0.3, 0]} receiveShadow>
-            <boxGeometry args={[SQUARE_SIZE * 8.4, 0.2, SQUARE_SIZE * 8.4]} />
-            <meshStandardMaterial color="#0a0a0a" metalness={0.9} roughness={0.1} />
+            <boxGeometry args={[SQUARE_SIZE * 8.4, 0.3, SQUARE_SIZE * 8.4]} />
+            <meshStandardMaterial color="#fff" roughness={0.1} />
           </mesh>
-          <mesh position={[0, -0.4, 0]}>
-            <boxGeometry args={[SQUARE_SIZE * 8.6, 0.1, SQUARE_SIZE * 8.6]} />
-            <meshStandardMaterial color="#d4af37" metalness={1} roughness={0.2} emissive="#4a3f1d" />
+          <mesh position={[0, -0.5, 0]}>
+            <boxGeometry args={[SQUARE_SIZE * 9, 0.2, SQUARE_SIZE * 9]} />
+            <meshStandardMaterial color="#3b82f6" roughness={0.1} />
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.45, 0]} opacity={0.8} scale={15} blur={2} far={4} color="#000000" />
+        <ContactShadows position={[0, -0.55, 0]} opacity={0.4} scale={20} blur={2} far={4} color="#3b82f6" />
 
         <OrbitControls 
           enablePan={false}
@@ -206,7 +211,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={1} mipmapBlur intensity={1.5} />
+          <Bloom luminanceThreshold={1.2} mipmapBlur intensity={0.5} />
         </EffectComposer>
       </Canvas>
     </div>
