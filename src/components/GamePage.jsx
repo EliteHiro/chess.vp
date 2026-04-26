@@ -133,7 +133,17 @@ function GameLayout({
           className="game-header-logo"
           onClick={onBack}
           id="game-logo-btn"
-          style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}
+          style={{ 
+            cursor: 'pointer', 
+            background: 'none', 
+            border: 'none', 
+            padding: 0,
+            fontFamily: 'var(--font-display)',
+            fontSize: '1.8rem',
+            fontWeight: 900,
+            color: 'white',
+            letterSpacing: '-1px'
+          }}
         >
           CHESS<span className="logo-dot">.</span>VP
         </button>
