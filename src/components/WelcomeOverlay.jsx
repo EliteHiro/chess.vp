@@ -54,13 +54,13 @@ export default function WelcomeOverlay({ onComplete }) {
       }}>
         <h1 style={{
           fontFamily: 'var(--font-display)',
-          fontSize: 'clamp(2rem, 5vw, 4rem)',
+          fontSize: 'clamp(1.8rem, 4vw, 3.2rem)',
           color: 'var(--text-primary)',
           lineHeight: '1.4',
           marginBottom: '3rem',
           textShadow: '0 0 20px rgba(255, 255, 255, 0.1)'
         }}>
-          "I want to tell you something, but before that I want to play a chess match with you"
+          "Luck has never once bowed to me - so let's play the only game where luck kneels to nothing, and skill alone decide who survives"
         </h1>
 
         <button
