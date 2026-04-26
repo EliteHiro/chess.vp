@@ -137,34 +137,50 @@ export default function ChessBoard({
         camera={{ position: [0, 6, 8], fov: 45 }}
         style={{ background: 'transparent' }}
       >
-        {/* Deep Magical Night Background */}
-        <color attach="background" args={['#050b1a']} />
-        <fog attach="fog" args={['#050b1a', 10, 25]} />
+        {/* Deep Magical Galaxy Background */}
+        <color attach="background" args={['#0a0520']} />
+        <fog attach="fog" args={['#0a0520', 10, 25]} />
         
-        {/* Twinkling Cartoonish Stars */}
-        <Stars radius={100} depth={50} count={6000} factor={6} saturation={1} fade speed={2} />
+        {/* Twinkling Galaxy Stars */}
+        <Stars radius={100} depth={50} count={8000} factor={7} saturation={1} fade speed={3} />
         
-        {/* Cartoonish 3D Moon */}
-        <Float speed={1} rotationIntensity={0.1} floatIntensity={0.5}>
-          <mesh position={[10, 8, -15]}>
-            <sphereGeometry args={[2, 32, 32]} />
+        {/* Cartoonish Nebula Clouds */}
+        <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+          <mesh position={[-12, 5, -15]}>
+            <sphereGeometry args={[4, 32, 32]} />
             <meshStandardMaterial 
-              color="#fefce8" 
-              emissive="#fefce8" 
+              color="#a855f7" 
+              emissive="#a855f7" 
+              emissiveIntensity={2} 
+              transparent 
+              opacity={0.4}
+            />
+          </mesh>
+        </Float>
+        
+        <Float speed={3} rotationIntensity={0.2} floatIntensity={1.5}>
+          <mesh position={[12, -3, -10]}>
+            <sphereGeometry args={[5, 32, 32]} />
+            <meshStandardMaterial 
+              color="#ec4899" 
+              emissive="#ec4899" 
               emissiveIntensity={1.5} 
+              transparent 
+              opacity={0.3}
             />
           </mesh>
         </Float>
 
-        {/* Moon Glow for the Scene */}
-        <pointLight position={[10, 8, -15]} color="#fff" intensity={3} />
-        <pointLight position={[-10, 5, 5]} color="#3b82f6" intensity={1.5} /> 
+        {/* Galactic Center / Wormhole Glow */}
+        <pointLight position={[0, 0, -20]} color="#06b6d4" intensity={5} />
+        <pointLight position={[10, 5, -5]} color="#ec4899" intensity={2} /> 
+        <pointLight position={[-10, 5, 5]} color="#a855f7" intensity={2} /> 
 
-        <ambientLight intensity={0.4} />
+        <ambientLight intensity={0.5} />
         <directionalLight 
           castShadow 
           position={[5, 10, 5]} 
-          intensity={1} 
+          intensity={1.5} 
         />
         
         <Environment preset="night" />
