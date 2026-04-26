@@ -61,7 +61,9 @@ function GameLayout({
 }) {
   const [chatInput, setChatInput] = useState('');
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
   const chatEndRef = useRef(null);
+  const lastMessageCount = useRef(chatMessages.length);
 
   // Format move history into paired rows
   const moveRows = []
@@ -73,10 +75,23 @@ function GameLayout({
     })
   }
 
-  // Auto-scroll chat to bottom
+  // Handle unread messages
+  useEffect(() => {
+    if (!isChatOpen && chatMessages.length > lastMessageCount.current) {
+      // Check if the last message was from the opponent
+      const lastMsg = chatMessages[chatMessages.length - 1];
+      if (lastMsg.senderId !== matchData?.players?.[playerColor]) {
+        setHasUnreadMessages(true);
+      }
+    }
+    lastMessageCount.current = chatMessages.length;
+  }, [chatMessages, isChatOpen, matchData, playerColor]);
+
+  // Auto-scroll chat to bottom and clear unread state
   useEffect(() => {
     if (isChatOpen) {
       chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      setHasUnreadMessages(false);
     }
   }, [chatMessages, isChatOpen]);
 
@@ -271,6 +286,14 @@ function GameLayout({
           onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
         >
           {isChatOpen ? '✕' : '💬'}
+          {hasUnreadMessages && !isChatOpen && (
+            <div style={{
+              position: 'absolute', top: '2px', right: '2px',
+              width: '14px', height: '14px', borderRadius: '50%',
+              backgroundColor: '#10b981', border: '2px solid var(--bg-primary)',
+              boxShadow: '0 0 10px #10b981'
+            }} />
+          )}
         </button>
       )}
 
