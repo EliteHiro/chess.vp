@@ -133,9 +133,9 @@ function GameLayout({
           className="game-header-logo"
           onClick={onBack}
           id="game-logo-btn"
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', background: 'none', border: 'none', padding: 0 }}
         >
-          Chess<span className="logo-dot">.</span>VP
+          CHESS<span className="logo-dot">.</span>VP
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           {onlineMatchId && (
