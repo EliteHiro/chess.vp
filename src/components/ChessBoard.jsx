@@ -296,8 +296,8 @@ export default function ChessBoard({
         style={{ background: 'transparent' }}
       >
         {/* Ancient Woods Background */}
-        <color attach="background" args={['#051005']} />
-        <fog attach="fog" args={['#051005', 5, 20]} />
+        <color attach="background" args={['#051205']} />
+        <fog attach="fog" args={['#051205', 4, 18]} />
         
         {/* Fireflies (Floating Green Glows) */}
         <Stars radius={50} depth={20} count={2000} factor={3} saturation={1} fade speed={1.5} />
