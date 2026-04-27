@@ -321,16 +321,6 @@ export default function ChessBoard({
             <boxGeometry args={[4, 2, 4]} />
             <meshStandardMaterial color="#2d3a2d" />
           </mesh>
-
-          {/* Overgrown Vines */}
-          {[...Array(8)].map((_, i) => (
-            <Float key={i} speed={1 + Math.random()} rotationIntensity={0.5} floatIntensity={0.5}>
-              <mesh position={[Math.sin(i) * 15, 8, Math.cos(i) * 10]} rotation={[0, 0, Math.random() * 0.5]}>
-                <cylinderGeometry args={[0.04, 0.04, 15]} />
-                <meshStandardMaterial color="#0f3d0f" />
-              </mesh>
-            </Float>
-          ))}
         </group>
 
         {/* Forest Lighting (Deep Jungle Sunrays) */}
