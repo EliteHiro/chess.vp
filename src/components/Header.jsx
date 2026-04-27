@@ -22,9 +22,7 @@ export default function Header() {
     <>
       <header className={`header ${scrolled ? 'scrolled' : ''}`} id="main-header">
         <Link to="/" className="header-logo" id="logo-link" style={{ textDecoration: 'none' }}>
-          <span>Chess</span>
-          <span className="logo-dot">.</span>
-          <span>VP</span>
+          CHESS<span className="logo-dot">.</span>VP
         </Link>
 
         <nav className="header-nav" id="desktop-nav" style={{ alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
