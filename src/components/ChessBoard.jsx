@@ -289,48 +289,66 @@ export default function ChessBoard({
   }, [selectedSquare, getValidMoves])
 
   return (
-    <div style={{ width: '100%', height: '100%', minHeight: '500px', display: 'flex', position: 'relative' }}>
+    <div style={{ 
+      width: '100%', 
+      height: '100%', 
+      minHeight: '500px', 
+      display: 'flex', 
+      position: 'relative',
+      background: '#051205' // Hard forest green background
+    }}>
       <Canvas 
         shadows 
         camera={{ position: [0, 6, 8], fov: 45 }}
-        style={{ background: '#051205' }}
       >
-        {/* Ancient Woods Background */}
+        {/* Deep Jungle Atmosphere */}
         <color attach="background" args={['#051205']} />
-        <fog attach="fog" args={['#051205', 4, 18]} />
+        <fog attach="fog" args={['#051205', 2, 15]} />
         
-        {/* Fireflies (Floating Green Glows) */}
-        <Stars radius={50} depth={20} count={3000} factor={4} saturation={1} fade speed={2} />
-        <pointLight position={[-5, 2, -5]} color="#4ade80" intensity={1.5} />
-        <pointLight position={[5, 3, -8]} color="#4ade80" intensity={1.5} />
+        {/* Floating Jungle Pollen/Fireflies (Replacement for Stars) */}
+        <group>
+          {[...Array(100)].map((_, i) => (
+            <Float key={i} speed={1} rotationIntensity={1} floatIntensity={1}>
+              <mesh position={[
+                (Math.random() - 0.5) * 20,
+                Math.random() * 10,
+                (Math.random() - 0.5) * 20
+              ]}>
+                <sphereGeometry args={[0.02, 8, 8]} />
+                <meshBasicMaterial color="#4ade80" />
+              </mesh>
+            </Float>
+          ))}
+        </group>
 
-        {/* MASSIVE Ancient Pillars (Theme Confirmation) */}
-        <group position={[0, -2, -15]}>
-          <mesh position={[-15, 8, 0]}>
-            <boxGeometry args={[4, 20, 4]} />
+        {/* Ancient Stone Environment */}
+        <group position={[0, -2, -10]}>
+          {/* Overgrown Pillars */}
+          <mesh position={[-8, 5, -5]}>
+            <cylinderGeometry args={[1.5, 1.8, 15, 32]} />
             <meshStandardMaterial color="#1a2e23" roughness={1} />
           </mesh>
-          <mesh position={[15, 8, 0]}>
-            <boxGeometry args={[4, 20, 4]} />
+          <mesh position={[8, 5, -5]}>
+            <cylinderGeometry args={[1.5, 1.8, 15, 32]} />
             <meshStandardMaterial color="#1a2e23" roughness={1} />
           </mesh>
-          {/* Stone Archway */}
-          <mesh position={[0, 16, 0]}>
-            <boxGeometry args={[34, 4, 4]} />
-            <meshStandardMaterial color="#1a2e23" roughness={1} />
+          {/* Mossy Wall */}
+          <mesh position={[0, 4, -12]}>
+            <boxGeometry args={[30, 15, 2]} />
+            <meshStandardMaterial color="#0a1a0f" roughness={1} />
           </mesh>
         </group>
 
-        {/* Forest Lighting (Deep Jungle Sunrays) */}
-        <pointLight position={[10, 20, 10]} color="#fde68a" intensity={3} />
-        <pointLight position={[-15, 15, -10]} color="#166534" intensity={2} /> 
-
-        <ambientLight intensity={0.5} />
+        {/* Pure Forest Lighting */}
+        <ambientLight intensity={0.4} />
+        <pointLight position={[10, 15, 10]} color="#fde68a" intensity={2} />
+        <pointLight position={[-10, 10, -10]} color="#22c55e" intensity={2} />
+        
         <directionalLight 
           castShadow 
-          position={[10, 20, 10]} 
+          position={[5, 15, 5]} 
           intensity={1.5} 
-          shadow-mapSize={[2048, 2048]}
+          shadow-mapSize={[1024, 1024]}
         />
         
         <Environment preset="forest" />
