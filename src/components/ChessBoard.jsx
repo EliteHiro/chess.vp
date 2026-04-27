@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // Bright, toy-like colors for the board squares
-  const baseColor = isLight ? '#fdfcf0' : '#3b82f6'
+  // Ancient stone palette
+  const baseColor = isLight ? '#e2e2d0' : '#4a5d4a' // Ivory stone vs Mossy stone
   let color = baseColor
   
-  if (isSelected) color = '#f59e0b' 
-  if (isLastMove) color = '#93c5fd'
-  if (isCheck) color = '#ef4444'
-  if (hovered && !isSelected) color = isLight ? '#fff' : '#60a5fa'
+  if (isSelected) color = '#d4af37' // Ancient Gold
+  if (isLastMove) color = '#7a8a7a'
+  if (isCheck) color = '#991b1b'
+  if (hovered && !isSelected) color = isLight ? '#f0f0e0' : '#5a6d5a'
 
   return (
     <group position={position}>
@@ -44,22 +44,22 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color} 
-          roughness={0.1} 
-          metalness={0.1}
+          roughness={0.8} 
+          metalness={0.2}
         />
       </mesh>
       
       {moveType === 'move' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.2, 32]} />
-          <meshBasicMaterial color="#f59e0b" transparent opacity={0.8} />
+          <meshBasicMaterial color="#d4af37" transparent opacity={0.6} />
         </mesh>
       )}
       
       {moveType === 'capture' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[SQUARE_SIZE/2 - 0.15, SQUARE_SIZE/2 - 0.05, 32]} />
-          <meshBasicMaterial color="#ef4444" transparent opacity={0.9} />
+          <meshBasicMaterial color="#991b1b" transparent opacity={0.8} />
         </mesh>
       )}
     </group>
@@ -68,15 +68,15 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  const color = isWhite ? '#ffffff' : '#111111' // Solid White and Deep Black
+  const color = isWhite ? '#f5f5f0' : '#1a1a1a' // Bone White and Obsidian Black
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: 0.2, // Satin/Matte finish like the Blender model
+      roughness: 0.7, // Stone-like matte finish
       metalness: 0.1,
-      emissive: isWhite ? '#333333' : '#000000',
+      emissive: isWhite ? '#111111' : '#000000',
       emissiveIntensity: 0.1
     }
 
@@ -295,26 +295,45 @@ export default function ChessBoard({
         camera={{ position: [0, 6, 8], fov: 45 }}
         style={{ background: 'transparent' }}
       >
-        {/* Deep Magical Galaxy Background */}
-        <color attach="background" args={['#0a0520']} />
-        <fog attach="fog" args={['#0a0520', 10, 25]} />
+        {/* Ancient Woods Background */}
+        <color attach="background" args={['#0a140a']} />
+        <fog attach="fog" args={['#0a140a', 8, 22]} />
         
-        {/* Twinkling Galaxy Stars */}
-        <Stars radius={100} depth={50} count={8000} factor={7} saturation={1} fade speed={3} />
+        {/* Soft Forest Particles (Dust/Fireflies) */}
+        <Stars radius={50} depth={20} count={1000} factor={2} saturation={0} fade speed={1} />
         
-        {/* Galactic Center / Wormhole Glow */}
-        <pointLight position={[0, 0, -20]} color="#06b6d4" intensity={5} />
-        <pointLight position={[10, 5, -5]} color="#ec4899" intensity={2} /> 
-        <pointLight position={[-10, 5, 5]} color="#a855f7" intensity={2} /> 
+        {/* Ancient Stone Ruins in background */}
+        <group position={[0, -2, -10]}>
+          <mesh position={[-8, 2, -5]} rotation={[0, 0.5, 0]}>
+            <boxGeometry args={[2, 6, 2]} />
+            <meshStandardMaterial color="#2d3a2d" roughness={0.9} />
+          </mesh>
+          <mesh position={[10, 3, -8]} rotation={[0, -0.3, 0]}>
+            <boxGeometry args={[3, 8, 3]} />
+            <meshStandardMaterial color="#1e2a1e" roughness={1} />
+          </mesh>
+          {/* Mossy overgrown vines */}
+          <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
+            <mesh position={[-5, 5, -2]} rotation={[0, 0, 0.5]}>
+              <cylinderGeometry args={[0.05, 0.05, 10]} />
+              <meshStandardMaterial color="#1a471a" />
+            </mesh>
+          </Float>
+        </group>
 
-        <ambientLight intensity={0.5} />
+        {/* Forest Lighting (God Rays Effect) */}
+        <pointLight position={[5, 15, 5]} color="#fefce8" intensity={2} />
+        <pointLight position={[-10, 10, -10]} color="#2d5a27" intensity={1.5} /> 
+
+        <ambientLight intensity={0.6} />
         <directionalLight 
           castShadow 
           position={[5, 10, 5]} 
-          intensity={1.5} 
+          intensity={1.2} 
+          shadow-mapSize={[2048, 2048]}
         />
         
-        <Environment preset="night" />
+        <Environment preset="forest" />
 
         <group position={[0, 0, 0]}>
           {RANKS.map((rank, rowIndex) =>
@@ -351,18 +370,18 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Whimsical Board Base */}
+          {/* Ancient Board Base */}
           <mesh position={[0, -0.3, 0]} receiveShadow>
-            <boxGeometry args={[SQUARE_SIZE * 8.4, 0.3, SQUARE_SIZE * 8.4]} />
-            <meshStandardMaterial color="#fff" roughness={0.1} />
+            <boxGeometry args={[SQUARE_SIZE * 8.6, 0.3, SQUARE_SIZE * 8.6]} />
+            <meshStandardMaterial color="#3a2e20" roughness={1} /> {/* Dark wood base */}
           </mesh>
           <mesh position={[0, -0.5, 0]}>
-            <boxGeometry args={[SQUARE_SIZE * 9, 0.2, SQUARE_SIZE * 9]} />
-            <meshStandardMaterial color="#3b82f6" roughness={0.1} />
+            <boxGeometry args={[SQUARE_SIZE * 9.2, 0.2, SQUARE_SIZE * 9.2]} />
+            <meshStandardMaterial color="#1e2a1e" roughness={1} /> {/* Stone platform */}
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.55, 0]} opacity={0.6} scale={20} blur={2} far={4} color="#000" />
+        <ContactShadows position={[0, -0.55, 0]} opacity={0.8} scale={20} blur={2.5} far={4} color="#000" />
 
         <OrbitControls 
           enablePan={false}

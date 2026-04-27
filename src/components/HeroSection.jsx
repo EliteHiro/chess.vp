@@ -21,7 +21,7 @@ export default function HeroSection() {
     <section className="hero" id="hero-section">
       {/* Background Image */}
       <div className="hero-background">
-        <img src="/disney_chess_background.png" alt="" aria-hidden="true" />
+        <img src="/jungle_theme_bg.png" alt="Ancient Woods" aria-hidden="true" />
       </div>
 
       {/* Dark Overlay */}
@@ -30,11 +30,11 @@ export default function HeroSection() {
       {/* Main Content Card */}
       <div className="hero-content" id="hero-content-card">
         <h1 className="hero-title">
-          Chess<span className="title-dot">.</span>VP
+          CHESS<span className="logo-dot">.</span>VP
         </h1>
         <p className="hero-subtitle">
-          Embark on a magical chess adventure! Challenge your friends to a whimsical 
-          duel in our enchanted kingdom and see who can master the board with style.
+          Step into the forgotten realm. Prove your wisdom amidst the ancient ruins 
+          and moss-covered paths of the hidden woods.
         </p>
         <div className="hero-buttons">
           <Link to="/local" className="btn btn-primary" id="hero-play-btn" style={{ textDecoration: 'none' }}>
