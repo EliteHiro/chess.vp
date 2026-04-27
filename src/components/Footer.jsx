@@ -21,7 +21,7 @@ export default function Footer() {
         onMouseOver={(e) => e.currentTarget.style.opacity = 1}
         onMouseOut={(e) => e.currentTarget.style.opacity = 0.5}
         >
-          Ancient Vault
+          Special message
         </Link>
       </p>
     </footer>
