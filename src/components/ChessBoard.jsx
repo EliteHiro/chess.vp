@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // Ancient stone palette
-  const baseColor = isLight ? '#e2e2d0' : '#4a5d4a' // Ivory stone vs Mossy stone
+  // Pixar Cartoonish palette
+  const baseColor = isLight ? '#f0e6ff' : '#7c3aed' // Cream lavender vs Vibrant purple
   let color = baseColor
   
-  if (isSelected) color = '#d4af37' // Ancient Gold
-  if (isLastMove) color = '#7a8a7a'
-  if (isCheck) color = '#991b1b'
-  if (hovered && !isSelected) color = isLight ? '#f0f0e0' : '#5a6d5a'
+  if (isSelected) color = '#ffb347' // Pixar Gold
+  if (isLastMove) color = '#a78bfa'
+  if (isCheck) color = '#f472b6'
+  if (hovered && !isSelected) color = isLight ? '#fff0ff' : '#8b5cf6'
 
   return (
     <group position={position}>
@@ -44,22 +44,22 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color} 
-          roughness={0.8} 
-          metalness={0.2}
+          roughness={0.3} 
+          metalness={0.1}
         />
       </mesh>
       
       {moveType === 'move' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.2, 32]} />
-          <meshBasicMaterial color="#d4af37" transparent opacity={0.6} />
+          <meshBasicMaterial color="#ffb347" transparent opacity={0.7} />
         </mesh>
       )}
       
       {moveType === 'capture' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[SQUARE_SIZE/2 - 0.15, SQUARE_SIZE/2 - 0.05, 32]} />
-          <meshBasicMaterial color="#991b1b" transparent opacity={0.8} />
+          <meshBasicMaterial color="#f472b6" transparent opacity={0.8} />
         </mesh>
       )}
     </group>
@@ -68,16 +68,16 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  const color = isWhite ? '#f5f5f0' : '#1a1a1a' // Bone White and Obsidian Black
+  const color = isWhite ? '#fff5ee' : '#2d1b69' // Warm cream vs Deep violet
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: 0.7, // Stone-like matte finish
-      metalness: 0.1,
-      emissive: isWhite ? '#111111' : '#000000',
-      emissiveIntensity: 0.1
+      roughness: 0.35,
+      metalness: 0.05,
+      emissive: isWhite ? '#f5e6d3' : '#1a0a3e',
+      emissiveIntensity: 0.15
     }
 
     // Professional Staunton-style multi-layered base
@@ -184,7 +184,7 @@ function Piece3D({ piece, position, squareId, onClick }) {
             {/* Slit indicator */}
             <mesh position={[0, 1.0, 0.1]} rotation={[0.5, 0, 0]}>
               <boxGeometry args={[0.02, 0.3, 0.1]} />
-              <meshStandardMaterial color={isWhite ? "#ddd" : "#000"} />
+              <meshStandardMaterial color={isWhite ? "#eee" : "#1a0a3e"} />
             </mesh>
             <mesh position={[0, 1.25, 0]}>
               <sphereGeometry args={[0.06, 16, 16]} />
@@ -288,70 +288,54 @@ export default function ChessBoard({
     return map
   }, [selectedSquare, getValidMoves])
 
-  return (
+   return (
     <div style={{ 
       width: '100%', 
       height: '100%', 
       minHeight: '500px', 
       display: 'flex', 
       position: 'relative',
-      background: '#051205' // Hard forest green background
+      background: 'linear-gradient(180deg, #1a1035, #0f0a20)'
     }}>
       <Canvas 
         shadows 
         camera={{ position: [0, 6, 8], fov: 45 }}
       >
-        {/* Deep Jungle Atmosphere */}
-        <color attach="background" args={['#051205']} />
-        <fog attach="fog" args={['#051205', 2, 15]} />
+        {/* Magical Pixar Atmosphere */}
+        <color attach="background" args={['#0f0a20']} />
+        <fog attach="fog" args={['#1a1035', 8, 25]} />
         
-        {/* Floating Jungle Pollen/Fireflies (Replacement for Stars) */}
+        {/* Magical Sparkle Particles */}
         <group>
-          {[...Array(100)].map((_, i) => (
-            <Float key={i} speed={1} rotationIntensity={1} floatIntensity={1}>
+          {[...Array(80)].map((_, i) => (
+            <Float key={i} speed={1.5 + Math.random()} rotationIntensity={0.5} floatIntensity={2}>
               <mesh position={[
                 (Math.random() - 0.5) * 20,
-                Math.random() * 10,
+                Math.random() * 8 + 1,
                 (Math.random() - 0.5) * 20
               ]}>
-                <sphereGeometry args={[0.02, 8, 8]} />
-                <meshBasicMaterial color="#4ade80" />
+                <sphereGeometry args={[0.03 + Math.random() * 0.02, 8, 8]} />
+                <meshBasicMaterial color={['#ffb347', '#a78bfa', '#f472b6', '#60a5fa', '#2dd4bf'][i % 5]} />
               </mesh>
             </Float>
           ))}
         </group>
 
-        {/* Ancient Stone Environment */}
-        <group position={[0, -2, -10]}>
-          {/* Overgrown Pillars */}
-          <mesh position={[-8, 5, -5]}>
-            <cylinderGeometry args={[1.5, 1.8, 15, 32]} />
-            <meshStandardMaterial color="#1a2e23" roughness={1} />
-          </mesh>
-          <mesh position={[8, 5, -5]}>
-            <cylinderGeometry args={[1.5, 1.8, 15, 32]} />
-            <meshStandardMaterial color="#1a2e23" roughness={1} />
-          </mesh>
-          {/* Mossy Wall */}
-          <mesh position={[0, 4, -12]}>
-            <boxGeometry args={[30, 15, 2]} />
-            <meshStandardMaterial color="#0a1a0f" roughness={1} />
-          </mesh>
-        </group>
-
-        {/* Pure Forest Lighting */}
-        <ambientLight intensity={0.4} />
-        <pointLight position={[10, 15, 10]} color="#fde68a" intensity={2} />
-        <pointLight position={[-10, 10, -10]} color="#22c55e" intensity={2} />
+        {/* Dreamy Pixar Lighting */}
+        <ambientLight intensity={0.6} />
+        <pointLight position={[10, 15, 10]} color="#ffb347" intensity={3} />
+        <pointLight position={[-10, 10, -10]} color="#a78bfa" intensity={2} />
+        <pointLight position={[0, 8, 8]} color="#f472b6" intensity={1} />
         
         <directionalLight 
           castShadow 
           position={[5, 15, 5]} 
           intensity={1.5} 
           shadow-mapSize={[1024, 1024]}
+          color="#fff5ee"
         />
         
-        <Environment preset="forest" />
+        <Environment preset="city" />
 
         <group position={[0, 0, 0]}>
           {RANKS.map((rank, rowIndex) =>
@@ -388,18 +372,18 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Ancient Board Base */}
+          {/* Pixar Board Base — Rounded, glossy */}
           <mesh position={[0, -0.3, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.6, 0.3, SQUARE_SIZE * 8.6]} />
-            <meshStandardMaterial color="#3a2e20" roughness={1} /> {/* Dark wood base */}
+            <meshStandardMaterial color="#2d1b69" roughness={0.4} metalness={0.1} />
           </mesh>
           <mesh position={[0, -0.5, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.2, 0.2, SQUARE_SIZE * 9.2]} />
-            <meshStandardMaterial color="#1e2a1e" roughness={1} /> {/* Stone platform */}
+            <meshStandardMaterial color="#1a1035" roughness={0.5} />
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.55, 0]} opacity={0.8} scale={20} blur={2.5} far={4} color="#000" />
+        <ContactShadows position={[0, -0.55, 0]} opacity={0.6} scale={20} blur={3} far={4} color="#1a1035" />
 
         <OrbitControls 
           enablePan={false}
@@ -410,7 +394,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={1.2} mipmapBlur intensity={1.2} />
+          <Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.8} />
         </EffectComposer>
       </Canvas>
     </div>
