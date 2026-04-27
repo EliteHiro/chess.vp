@@ -98,15 +98,22 @@ export default function useChessGame() {
         }
 
         // Make the move
-        const move = game.move({ from: selectedSquare, to: square })
-        if (move) {
-          const newGame = new Chess(game.fen())
-          setGame(newGame)
-          setMoveHistory(prev => [...prev, move])
-          setLastMove({ from: selectedSquare, to: square })
-          setSelectedSquare(null)
-          return
-        }
+          const move = game.move({ from: selectedSquare, to: square })
+          if (move) {
+            // Play sound based on move type
+            const audio = new Audio(
+              move.captured ? '/capture.mp3' : 
+              game.inCheck() ? '/check.mp3' : '/move.mp3'
+            );
+            audio.play().catch(e => console.log('Audio play failed:', e));
+
+            const newGame = new Chess(game.fen())
+            setGame(newGame)
+            setMoveHistory(prev => [...prev, move])
+            setLastMove({ from: selectedSquare, to: square })
+            setSelectedSquare(null)
+            return
+          }
       }
 
       // Invalid move — deselect
@@ -131,6 +138,13 @@ export default function useChessGame() {
     })
 
     if (move) {
+      // Play sound for promotion
+      const audio = new Audio(
+        move.captured ? '/capture.mp3' : 
+        game.inCheck() ? '/check.mp3' : '/move.mp3'
+      );
+      audio.play().catch(e => console.log('Audio play failed:', e));
+
       const newGame = new Chess(game.fen())
       setGame(newGame)
       setMoveHistory(prev => [...prev, move])

@@ -35,12 +35,31 @@ export default function useOnlineChessGame(matchId) {
         const newGame = new Chess();
         const newHistory = [];
         data.history.forEach(moveStr => {
-          const m = newGame.move(moveStr); // SAN move
-          if (m) newHistory.push(m);
-        });
-        setGame(newGame);
-        setMoveHistory(newHistory);
-        if (data.lastMove) setLastMove(data.lastMove);
+        if (m) {
+          newHistory.push(m);
+        }
+      });
+
+      // Play sound for the opponent's move (if history lengthened)
+      if (data.history && data.history.length > game.history().length) {
+        const lastMoveSan = data.history[data.history.length - 1];
+        const tempGame = new Chess();
+        // Play out history to find if last move was a capture or check
+        data.history.slice(0, -1).forEach(h => tempGame.move(h));
+        const moveObj = tempGame.move(lastMoveSan);
+        
+        if (moveObj) {
+          const audio = new Audio(
+            moveObj.captured ? '/capture.mp3' : 
+            tempGame.inCheck() ? '/check.mp3' : '/move.mp3'
+          );
+          audio.play().catch(e => console.log('Audio play failed:', e));
+        }
+      }
+
+      setGame(newGame);
+      setMoveHistory(newHistory);
+      if (data.lastMove) setLastMove(data.lastMove);
       } else if (data.fen && data.fen !== game.fen()) {
         setGame(new Chess(data.fen));
       }
@@ -147,6 +166,13 @@ export default function useOnlineChessGame(matchId) {
 
         const move = game.move({ from: selectedSquare, to: square });
         if (move) {
+          // Play sound for our move
+          const audio = new Audio(
+            move.captured ? '/capture.mp3' : 
+            game.inCheck() ? '/check.mp3' : '/move.mp3'
+          );
+          audio.play().catch(e => console.log('Audio play failed:', e));
+
           const newGame = new Chess(game.fen()); // Create true clone to rerender
           setGame(newGame);
           setSelectedSquare(null);
@@ -174,6 +200,13 @@ export default function useOnlineChessGame(matchId) {
     });
 
     if (move) {
+      // Play sound for promotion
+      const audio = new Audio(
+        move.captured ? '/capture.mp3' : 
+        game.inCheck() ? '/check.mp3' : '/move.mp3'
+      );
+      audio.play().catch(e => console.log('Audio play failed:', e));
+
       const newGame = new Chess(game.fen());
       setGame(newGame);
       syncMoveToFirebase(newGame, move, pendingPromotion.from, pendingPromotion.to);
