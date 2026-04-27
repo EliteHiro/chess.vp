@@ -296,40 +296,52 @@ export default function ChessBoard({
         style={{ background: 'transparent' }}
       >
         {/* Ancient Woods Background */}
-        <color attach="background" args={['#0a140a']} />
-        <fog attach="fog" args={['#0a140a', 8, 22]} />
+        <color attach="background" args={['#051005']} />
+        <fog attach="fog" args={['#051005', 5, 20]} />
         
-        {/* Soft Forest Particles (Dust/Fireflies) */}
-        <Stars radius={50} depth={20} count={1000} factor={2} saturation={0} fade speed={1} />
-        
-        {/* Ancient Stone Ruins in background */}
-        <group position={[0, -2, -10]}>
-          <mesh position={[-8, 2, -5]} rotation={[0, 0.5, 0]}>
-            <boxGeometry args={[2, 6, 2]} />
-            <meshStandardMaterial color="#2d3a2d" roughness={0.9} />
+        {/* Fireflies (Floating Green Glows) */}
+        <Stars radius={50} depth={20} count={2000} factor={3} saturation={1} fade speed={1.5} />
+        <pointLight position={[-5, 2, -5]} color="#4ade80" intensity={0.5} />
+        <pointLight position={[5, 3, -8]} color="#4ade80" intensity={0.5} />
+
+        {/* Ancient Stone Ruins & Vegetation */}
+        <group position={[0, -2, -12]}>
+          {/* Main Pillars */}
+          <mesh position={[-10, 4, -5]} rotation={[0, 0.4, 0.1]}>
+            <boxGeometry args={[2.5, 12, 2.5]} />
+            <meshStandardMaterial color="#2a352a" roughness={1} />
           </mesh>
-          <mesh position={[10, 3, -8]} rotation={[0, -0.3, 0]}>
-            <boxGeometry args={[3, 8, 3]} />
+          <mesh position={[12, 5, -8]} rotation={[0, -0.2, -0.1]}>
+            <boxGeometry args={[3, 15, 3]} />
             <meshStandardMaterial color="#1e2a1e" roughness={1} />
           </mesh>
-          {/* Mossy overgrown vines */}
-          <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
-            <mesh position={[-5, 5, -2]} rotation={[0, 0, 0.5]}>
-              <cylinderGeometry args={[0.05, 0.05, 10]} />
-              <meshStandardMaterial color="#1a471a" />
-            </mesh>
-          </Float>
+          
+          {/* Broken Ruins */}
+          <mesh position={[0, 1, -15]} rotation={[0.5, 0.5, 0]}>
+            <boxGeometry args={[4, 2, 4]} />
+            <meshStandardMaterial color="#2d3a2d" />
+          </mesh>
+
+          {/* Overgrown Vines */}
+          {[...Array(8)].map((_, i) => (
+            <Float key={i} speed={1 + Math.random()} rotationIntensity={0.5} floatIntensity={0.5}>
+              <mesh position={[Math.sin(i) * 15, 8, Math.cos(i) * 10]} rotation={[0, 0, Math.random() * 0.5]}>
+                <cylinderGeometry args={[0.04, 0.04, 15]} />
+                <meshStandardMaterial color="#0f3d0f" />
+              </mesh>
+            </Float>
+          ))}
         </group>
 
-        {/* Forest Lighting (God Rays Effect) */}
-        <pointLight position={[5, 15, 5]} color="#fefce8" intensity={2} />
-        <pointLight position={[-10, 10, -10]} color="#2d5a27" intensity={1.5} /> 
+        {/* Forest Lighting (Deep Jungle Sunrays) */}
+        <pointLight position={[10, 20, 10]} color="#fde68a" intensity={3} />
+        <pointLight position={[-15, 15, -10]} color="#166534" intensity={2} /> 
 
-        <ambientLight intensity={0.6} />
+        <ambientLight intensity={0.5} />
         <directionalLight 
           castShadow 
-          position={[5, 10, 5]} 
-          intensity={1.2} 
+          position={[10, 20, 10]} 
+          intensity={1.5} 
           shadow-mapSize={[2048, 2048]}
         />
         
