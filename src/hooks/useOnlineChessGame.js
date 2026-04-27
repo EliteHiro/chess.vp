@@ -49,11 +49,10 @@ export default function useOnlineChessGame(matchId) {
         const moveObj = tempGame.move(lastMoveSan);
         
         if (moveObj) {
-          const audio = new Audio(
-            moveObj.captured ? '/capture.mp3' : 
-            tempGame.inCheck() ? '/check.mp3' : '/move.mp3'
-          );
-          audio.play().catch(e => console.log('Audio play failed:', e));
+          const audioPath = moveObj.captured ? '/capture.mp3' : (tempGame.inCheck() ? '/check.mp3' : '/move.mp3');
+          const audio = new Audio(audioPath);
+          audio.volume = 1.0;
+          audio.play().catch(e => console.error('Audio play failed (Opponent):', audioPath, e));
         }
       }
 
@@ -166,12 +165,11 @@ export default function useOnlineChessGame(matchId) {
 
         const move = game.move({ from: selectedSquare, to: square });
         if (move) {
-          // Play sound for our move
-          const audio = new Audio(
-            move.captured ? '/capture.mp3' : 
-            game.inCheck() ? '/check.mp3' : '/move.mp3'
-          );
-          audio.play().catch(e => console.log('Audio play failed:', e));
+          // Play sound for our move (Max Volume)
+          const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
+          const audio = new Audio(audioPath);
+          audio.volume = 1.0;
+          audio.play().catch(e => console.error('Audio play failed (Our Move):', audioPath, e));
 
           const newGame = new Chess(game.fen()); // Create true clone to rerender
           setGame(newGame);
@@ -200,12 +198,11 @@ export default function useOnlineChessGame(matchId) {
     });
 
     if (move) {
-      // Play sound for promotion
-      const audio = new Audio(
-        move.captured ? '/capture.mp3' : 
-        game.inCheck() ? '/check.mp3' : '/move.mp3'
-      );
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      // Play sound for promotion (Max Volume)
+      const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
+      const audio = new Audio(audioPath);
+      audio.volume = 1.0;
+      audio.play().catch(e => console.error('Audio play failed (Promotion):', audioPath, e));
 
       const newGame = new Chess(game.fen());
       setGame(newGame);

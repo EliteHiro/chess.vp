@@ -100,12 +100,11 @@ export default function useChessGame() {
         // Make the move
           const move = game.move({ from: selectedSquare, to: square })
           if (move) {
-            // Play sound based on move type
-            const audio = new Audio(
-              move.captured ? '/capture.mp3' : 
-              game.inCheck() ? '/check.mp3' : '/move.mp3'
-            );
-            audio.play().catch(e => console.log('Audio play failed:', e));
+            // Play sound based on move type (Max Volume)
+            const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
+            const audio = new Audio(audioPath);
+            audio.volume = 1.0;
+            audio.play().catch(e => console.error('Audio play failed:', audioPath, e));
 
             const newGame = new Chess(game.fen())
             setGame(newGame)
@@ -138,12 +137,11 @@ export default function useChessGame() {
     })
 
     if (move) {
-      // Play sound for promotion
-      const audio = new Audio(
-        move.captured ? '/capture.mp3' : 
-        game.inCheck() ? '/check.mp3' : '/move.mp3'
-      );
-      audio.play().catch(e => console.log('Audio play failed:', e));
+      // Play sound for promotion (Max Volume)
+      const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
+      const audio = new Audio(audioPath);
+      audio.volume = 1.0;
+      audio.play().catch(e => console.error('Audio play failed:', audioPath, e));
 
       const newGame = new Chess(game.fen())
       setGame(newGame)
