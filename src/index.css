@@ -703,8 +703,10 @@ body {
 
 .secret-wall-container {
   min-height: 100vh;
-  background: #111; /* Fallback */
-  background-image: url('/ancient_forest_game_bg.png'); /* Or a rocky texture */
+  background-color: #121412;
+  background-image: 
+    radial-gradient(circle at center, rgba(30, 36, 32, 0.8) 0%, rgba(10, 12, 10, 1) 100%),
+    repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(0,0,0,0.1) 5px, rgba(0,0,0,0.1) 10px);
   background-size: cover;
   background-attachment: fixed;
   background-position: center;
