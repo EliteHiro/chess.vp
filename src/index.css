@@ -599,9 +599,168 @@ body {
   66%       { transform: translateY(5px) rotate(-2deg); }
 }
 
-@keyframes firefly {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
-  25% { transform: translate(10px, -15px) scale(1.2); opacity: 0.8; }
-  50% { transform: translate(-5px, -25px) scale(0.9); opacity: 0.4; }
-  75% { transform: translate(-15px, -10px) scale(1.1); opacity: 0.9; }
+}
+
+/* ======= SECRET WALL ======= */
+.secret-password-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-deep);
+  position: relative;
+  padding: 2rem;
+}
+
+.password-box {
+  background: var(--bg-panel);
+  padding: 4rem 3rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-gold);
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(12px);
+  animation: popIn 0.5s ease-out;
+}
+
+.password-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+.password-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-style: italic;
+  font-family: var(--font-body);
+}
+
+.password-input {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border-gold);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  text-align: center;
+  letter-spacing: 2px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.password-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 15px rgba(212,175,55,0.2);
+}
+
+.password-error {
+  color: #ff5a4f;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  background: rgba(181,31,23,0.1);
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(181,31,23,0.3);
+}
+
+.password-submit-btn {
+  width: 100%;
+}
+
+.back-btn {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: color 0.3s ease;
+}
+
+.back-btn:hover {
+  color: var(--gold);
+}
+
+.wall-back-btn {
+  position: fixed;
+  z-index: 100;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.secret-wall-container {
+  min-height: 100vh;
+  background: #111; /* Fallback */
+  background-image: url('/ancient_forest_game_bg.png'); /* Or a rocky texture */
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  overflow-y: auto;
+  position: relative;
+}
+
+.secret-wall-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6); /* Darken bg so text is readable */
+  z-index: 0;
+}
+
+.ancient-wall {
+  position: relative;
+  z-index: 10;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 6rem 2rem 10rem 2rem;
+}
+
+.carved-text {
+  color: #b8ccbb;
+  font-family: var(--font-body);
+  text-align: justify;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8), -1px -1px 1px rgba(255,255,255,0.05); /* Carved effect */
+}
+
+.wall-title {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  text-align: center;
+  color: var(--gold);
+  margin-bottom: 4rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 4px 15px rgba(0,0,0,0.8), 0 0 20px rgba(212,175,55,0.3);
+}
+
+.wall-paragraph {
+  font-size: 1.2rem;
+  line-height: 2.2;
+  margin-bottom: 2.5rem;
+  opacity: 0.85;
+}
+
+.wall-paragraph:first-letter {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  float: left;
+  line-height: 1;
+  padding-right: 1rem;
+  color: var(--gold);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
 }

@@ -1,7 +1,8 @@
-export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, onNewGame, onGoHome, playerColor }) {
+export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, onNewGame, onGoHome, playerColor, mode, onViewSecret }) {
   let icon = '🤝'
   let title = 'Draw'
   let message = 'The game ended in a draw.'
+  let canShowSecret = false;
 
   if (isCheckmate) {
     const winnerColor = turn === 'w' ? 'b' : 'w';
@@ -12,6 +13,8 @@ export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, 
     message = won 
       ? `Congratulations! You defeated your opponent by checkmate.`
       : `Better luck next time. Your opponent won by checkmate.`
+      
+    canShowSecret = won && mode === 'online';
 
     if (!playerColor || playerColor === 'spectator') {
       icon = '🏆'
@@ -31,6 +34,11 @@ export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, 
         <h2>{title}</h2>
         <p>{message}</p>
         <div className="modal-buttons">
+          {canShowSecret && (
+            <button className="btn btn-primary" onClick={onViewSecret} style={{ background: 'linear-gradient(135deg, #aa8825, #d4af37)', color: '#08120b', borderColor: '#ffeba1' }}>
+              View Secret Message
+            </button>
+          )}
           <button className="btn btn-primary" onClick={onNewGame} id="modal-new-game">
             New Game
           </button>

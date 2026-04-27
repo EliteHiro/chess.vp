@@ -406,9 +406,11 @@ function GameLayout({
           isStalemate={isStalemate}
           isDraw={isDraw}
           turn={turn}
-          onNewGame={reset}
-          onGoHome={onBack}
           playerColor={playerColor}
+          mode={mode}
+          onNewGame={reset}
+          onGoHome={() => navigate('/')}
+          onViewSecret={() => navigate('/secret', { state: { authorized: true } })}
         />
       )}
     </div>
