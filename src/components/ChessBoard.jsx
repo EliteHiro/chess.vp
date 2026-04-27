@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // Pixar Cartoonish palette
-  const baseColor = isLight ? '#f0e6ff' : '#7c3aed' // Cream lavender vs Vibrant purple
+  // Luxury antique palette
+  const baseColor = isLight ? '#f2e8c9' : '#3b1a0e' // Aged ivory vs Rich dark walnut
   let color = baseColor
   
-  if (isSelected) color = '#ffb347' // Pixar Gold
-  if (isLastMove) color = '#a78bfa'
-  if (isCheck) color = '#f472b6'
-  if (hovered && !isSelected) color = isLight ? '#fff0ff' : '#8b5cf6'
+  if (isSelected) color = '#c9960c'     // Antique gold
+  if (isLastMove) color = isLight ? '#e2d4a0' : '#5a2d12'
+  if (isCheck) color = '#8b0000'        // Deep crimson
+  if (hovered && !isSelected) color = isLight ? '#fffbe0' : '#5c2a14'
 
   return (
     <group position={position}>
@@ -44,22 +44,22 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color} 
-          roughness={0.3} 
-          metalness={0.1}
+          roughness={isLight ? 0.15 : 0.25}
+          metalness={isLight ? 0.08 : 0.04}
         />
       </mesh>
       
       {moveType === 'move' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.2, 32]} />
-          <meshBasicMaterial color="#ffb347" transparent opacity={0.7} />
+          <meshBasicMaterial color="#c9960c" transparent opacity={0.75} />
         </mesh>
       )}
       
       {moveType === 'capture' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[SQUARE_SIZE/2 - 0.15, SQUARE_SIZE/2 - 0.05, 32]} />
-          <meshBasicMaterial color="#f472b6" transparent opacity={0.8} />
+          <meshBasicMaterial color="#8b0000" transparent opacity={0.7} />
         </mesh>
       )}
     </group>
@@ -68,16 +68,17 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  const color = isWhite ? '#fff5ee' : '#2d1b69' // Warm cream vs Deep violet
+  // White: aged pearl/ivory lacquer | Black: deep ebony with dark sheen
+  const color = isWhite ? '#f5ead0' : '#1a0e06'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: 0.35,
-      metalness: 0.05,
-      emissive: isWhite ? '#f5e6d3' : '#1a0a3e',
-      emissiveIntensity: 0.15
+      roughness: isWhite ? 0.18 : 0.12,  // Lacquered finish
+      metalness: isWhite ? 0.06 : 0.18,
+      emissive: isWhite ? '#c8a45a' : '#3a1f0a',
+      emissiveIntensity: isWhite ? 0.06 : 0.08
     }
 
     // Professional Staunton-style multi-layered base
@@ -321,18 +322,18 @@ export default function ChessBoard({
           ))}
         </group>
 
-        {/* Balanced Pixar Lighting — not too bright up close */}
-        <ambientLight intensity={0.35} />
-        <pointLight position={[10, 15, 10]} color="#ffb347" intensity={1.2} distance={30} decay={2} />
-        <pointLight position={[-10, 10, -10]} color="#a78bfa" intensity={0.8} distance={25} decay={2} />
-        <pointLight position={[0, 8, 8]} color="#f472b6" intensity={0.4} distance={20} decay={2} />
+        {/* Warm candlelight / antique lighting */}
+        <ambientLight intensity={0.3} color="#ffe8b0" />
+        <pointLight position={[8, 14, 8]}  color="#ffcc66" intensity={1.8} distance={35} decay={2} />
+        <pointLight position={[-8, 10, -8]} color="#ff9933" intensity={1.0} distance={30} decay={2} />
+        <pointLight position={[0, 6, 10]}  color="#ffd580" intensity={0.6} distance={20} decay={2} />
         
         <directionalLight 
           castShadow 
           position={[5, 15, 5]} 
-          intensity={1.0} 
-          shadow-mapSize={[1024, 1024]}
-          color="#fff5ee"
+          intensity={0.9} 
+          shadow-mapSize={[2048, 2048]}
+          color="#ffe0a0"
         />
 
         <group position={[0, 0, 0]}>
@@ -370,14 +371,21 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Pixar Board Base — Rounded, glossy */}
-          <mesh position={[0, -0.3, 0]} receiveShadow>
-            <boxGeometry args={[SQUARE_SIZE * 8.6, 0.3, SQUARE_SIZE * 8.6]} />
-            <meshStandardMaterial color="#2d1b69" roughness={0.4} metalness={0.1} />
+          {/* Luxury board frame — dark mahogany with gold border */}
+          <mesh position={[0, -0.28, 0]} receiveShadow>
+            <boxGeometry args={[SQUARE_SIZE * 8.8, 0.28, SQUARE_SIZE * 8.8]} />
+            <meshStandardMaterial color="#2b0f06" roughness={0.2} metalness={0.08} />
           </mesh>
+          {/* Gold inlay border */}
+          <mesh position={[0, -0.14, 0]}>
+            <boxGeometry args={[SQUARE_SIZE * 9.0, 0.05, SQUARE_SIZE * 9.0]} />
+            <meshStandardMaterial color="#b8860b" roughness={0.15} metalness={0.7}
+              emissive="#7a5500" emissiveIntensity={0.3} />
+          </mesh>
+          {/* Deep platform base */}
           <mesh position={[0, -0.5, 0]}>
-            <boxGeometry args={[SQUARE_SIZE * 9.2, 0.2, SQUARE_SIZE * 9.2]} />
-            <meshStandardMaterial color="#1a1035" roughness={0.5} />
+            <boxGeometry args={[SQUARE_SIZE * 9.4, 0.25, SQUARE_SIZE * 9.4]} />
+            <meshStandardMaterial color="#1a0a04" roughness={0.3} metalness={0.05} />
           </mesh>
         </group>
 
@@ -392,7 +400,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={1.5} mipmapBlur intensity={0.3} />
+          <Bloom luminanceThreshold={1.4} mipmapBlur intensity={0.25} />
         </EffectComposer>
       </Canvas>
     </div>
