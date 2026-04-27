@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // Luxury antique palette
-  const baseColor = isLight ? '#f2e8c9' : '#3b1a0e' // Aged ivory vs Rich dark walnut
+  // Luxury purple theme — matches website palette
+  const baseColor = isLight ? '#e8deff' : '#2d0e6e' // Pearl lavender vs Deep royal violet
   let color = baseColor
   
-  if (isSelected) color = '#c9960c'     // Antique gold
-  if (isLastMove) color = isLight ? '#e2d4a0' : '#5a2d12'
-  if (isCheck) color = '#8b0000'        // Deep crimson
-  if (hovered && !isSelected) color = isLight ? '#fffbe0' : '#5c2a14'
+  if (isSelected) color = '#c9960c'       // Antique gold selection
+  if (isLastMove) color = isLight ? '#d4c4ff' : '#4a1a9e'
+  if (isCheck) color = '#8b0000'          // Deep crimson
+  if (hovered && !isSelected) color = isLight ? '#f0e8ff' : '#3d12a0'
 
   return (
     <group position={position}>
@@ -44,8 +44,8 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color} 
-          roughness={isLight ? 0.15 : 0.25}
-          metalness={isLight ? 0.08 : 0.04}
+          roughness={isLight ? 0.12 : 0.08}
+          metalness={isLight ? 0.1 : 0.25}
         />
       </mesh>
       
@@ -68,17 +68,17 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  // White: aged pearl/ivory lacquer | Black: deep ebony with dark sheen
-  const color = isWhite ? '#f5ead0' : '#1a0e06'
+  // White: luminous pearl with lavender tint | Black: deep obsidian violet
+  const color = isWhite ? '#f0ecff' : '#150830'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: isWhite ? 0.18 : 0.12,  // Lacquered finish
-      metalness: isWhite ? 0.06 : 0.18,
-      emissive: isWhite ? '#c8a45a' : '#3a1f0a',
-      emissiveIntensity: isWhite ? 0.06 : 0.08
+      roughness: isWhite ? 0.12 : 0.08,
+      metalness: isWhite ? 0.15 : 0.35,
+      emissive: isWhite ? '#9f7aea' : '#4c1d95',
+      emissiveIntensity: isWhite ? 0.04 : 0.1
     }
 
     // Professional Staunton-style multi-layered base
@@ -322,18 +322,18 @@ export default function ChessBoard({
           ))}
         </group>
 
-        {/* Warm candlelight / antique lighting */}
-        <ambientLight intensity={0.3} color="#ffe8b0" />
-        <pointLight position={[8, 14, 8]}  color="#ffcc66" intensity={1.8} distance={35} decay={2} />
-        <pointLight position={[-8, 10, -8]} color="#ff9933" intensity={1.0} distance={30} decay={2} />
-        <pointLight position={[0, 6, 10]}  color="#ffd580" intensity={0.6} distance={20} decay={2} />
+        {/* Purple-gold luxury lighting — matches website theme */}
+        <ambientLight intensity={0.35} color="#c4b5fd" />
+        <pointLight position={[8, 14, 8]}  color="#ffb347" intensity={2.0} distance={35} decay={2} />
+        <pointLight position={[-8, 10, -8]} color="#a78bfa" intensity={1.4} distance={30} decay={2} />
+        <pointLight position={[0, 6, 10]}  color="#f472b6" intensity={0.5} distance={20} decay={2} />
         
         <directionalLight 
           castShadow 
           position={[5, 15, 5]} 
-          intensity={0.9} 
+          intensity={1.0} 
           shadow-mapSize={[2048, 2048]}
-          color="#ffe0a0"
+          color="#e0d0ff"
         />
 
         <group position={[0, 0, 0]}>
@@ -371,21 +371,21 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Luxury board frame — dark mahogany with gold border */}
+          {/* Luxury purple board frame with gold border */}
           <mesh position={[0, -0.28, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.8, 0.28, SQUARE_SIZE * 8.8]} />
-            <meshStandardMaterial color="#2b0f06" roughness={0.2} metalness={0.08} />
+            <meshStandardMaterial color="#1a0a40" roughness={0.15} metalness={0.2} />
           </mesh>
           {/* Gold inlay border */}
           <mesh position={[0, -0.14, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.0, 0.05, SQUARE_SIZE * 9.0]} />
-            <meshStandardMaterial color="#b8860b" roughness={0.15} metalness={0.7}
-              emissive="#7a5500" emissiveIntensity={0.3} />
+            <meshStandardMaterial color="#b8860b" roughness={0.1} metalness={0.8}
+              emissive="#7a5500" emissiveIntensity={0.4} />
           </mesh>
-          {/* Deep platform base */}
+          {/* Deep violet platform base */}
           <mesh position={[0, -0.5, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.4, 0.25, SQUARE_SIZE * 9.4]} />
-            <meshStandardMaterial color="#1a0a04" roughness={0.3} metalness={0.05} />
+            <meshStandardMaterial color="#0f0520" roughness={0.2} metalness={0.1} />
           </mesh>
         </group>
 
