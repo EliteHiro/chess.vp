@@ -11,42 +11,22 @@ export default function HeroSection() {
       </div>
       <div className="hero-overlay" />
 
-      {/* Baymax-style floating white orbs */}
-      {[
-        { size: 220, top: '10%', right: '8%', opacity: 0.12, delay: '0s' },
-        { size: 140, top: '60%', left: '5%',  opacity: 0.10, delay: '2s' },
-        { size: 80,  top: '35%', right: '25%',opacity: 0.08, delay: '4s' },
-      ].map((orb, i) => (
-        <div key={i} style={{
-          position: 'absolute',
-          width: orb.size, height: orb.size,
-          background: 'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9), rgba(255,255,255,0.2))',
-          borderRadius: '50%',
-          top: orb.top, right: orb.right, left: orb.left,
-          opacity: orb.opacity,
-          zIndex: 3,
-          animation: `float 6s ease-in-out infinite`,
-          animationDelay: orb.delay,
-          filter: 'blur(2px)'
-        }}/>
-      ))}
-
       <div className="hero-content" id="hero-content-card">
 
-        {/* Red badge — Baymax armor red */}
+        {/* Matte red badge */}
         <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-          background: 'var(--red)',
-          borderRadius: 'var(--radius-full)',
-          padding: '0.3rem 1rem',
+          display: 'inline-block',
+          background: '#c42b22',
+          borderRadius: '9999px',
+          padding: '0.3rem 1.2rem',
           marginBottom: '1.5rem',
           fontSize: '0.65rem',
           fontFamily: 'var(--font-display)',
           fontWeight: 700,
           color: 'white',
-          letterSpacing: '2.5px',
+          letterSpacing: '3px',
           textTransform: 'uppercase',
-          boxShadow: '0 3px 0 var(--red-dark)',
+          boxShadow: '0 3px 0 #8b1510',
         }}>
           CHESS PLATFORM
         </div>
