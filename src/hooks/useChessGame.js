@@ -151,6 +151,8 @@ export default function useChessGame() {
   const undo = useCallback(() => {
     const move = game.undo()
     if (move) {
+      const newGame = new Chess(game.fen())
+      setGame(newGame)
       setMoveHistory(prev => {
         const newHistory = prev.slice(0, -1)
         if (newHistory.length > 0) {

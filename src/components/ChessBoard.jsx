@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // ANCIENT MOSSY STONE theme
-  const baseColor = isLight ? '#5a6e5a' : '#2d332e' // Mossy light stone vs Dark slate
+  // EXACT CHESS.COM THEME
+  const baseColor = isLight ? '#eeeed2' : '#769656' // Cream vs Green
   let color = baseColor
   
-  if (isSelected) color = '#8f9c6d'   // Pale moss selection
-  if (isLastMove) color = isLight ? '#71826b' : '#3c453d'
-  if (isCheck) color = '#b54338'      // Rusted red alert
-  if (hovered && !isSelected) color = isLight ? '#6a7d6a' : '#39403a'
+  if (isSelected) color = '#f6f669'   // Yellow highlight
+  if (isLastMove) color = isLight ? '#f6f669' : '#baca44'
+  if (isCheck) color = '#ff3333'      // Red alert
+  if (hovered && !isSelected) color = isLight ? '#d6d6bd' : '#6a874d'
 
   return (
     <group position={position}>
@@ -44,10 +44,8 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color}
-          roughness={0.95}
-          metalness={0.05}
-          emissive={isSelected ? '#1f2b21' : '#000000'}
-          emissiveIntensity={0.5}
+          roughness={1.0}
+          metalness={0.0}
         />
       </mesh>
       
@@ -70,17 +68,15 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  // White: Weathered pale stone | Black: Dark mossy slate
-  const color = isWhite ? '#b5bcae' : '#222824'
+  // White: Pure white | Black: Dark grey
+  const color = isWhite ? '#ffffff' : '#323232'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: 0.95,
-      metalness: 0.05,
-      emissive: '#000000',
-      emissiveIntensity: 0
+      roughness: 0.8,
+      metalness: 0.1,
     }
 
     // Professional Staunton-style multi-layered base
@@ -323,20 +319,16 @@ export default function ChessBoard({
           ))}
         </group>
 
-        {/* Atmospheric ancient forest lighting — softer, less intense */}
-        <ambientLight intensity={0.7} color="#a1b3a3" />
-        <pointLight position={[8, 12, 8]}  color="#e8e1cd" intensity={1.5} distance={35} decay={2} />
-        <pointLight position={[-8, 10, -8]} color="#7c947c" intensity={1.2} distance={28} decay={2} />
-        <pointLight position={[0, 6, 10]}  color="#b09f82" intensity={0.8} distance={20} decay={2} />
-        <pointLight position={[0, -2, 0]}  color="#5a6e5a" intensity={1.0} distance={15} decay={2} />
-        
-        {/* Soft Sunbeam effect */}
+        {/* Bright, even lighting for clear visibility */}
+        <ambientLight intensity={1.5} color="#ffffff" />
+        <pointLight position={[8, 12, 8]}  color="#ffffff" intensity={1.5} distance={35} decay={2} />
+        <pointLight position={[-8, 10, -8]} color="#ffffff" intensity={1.2} distance={28} decay={2} />
         <directionalLight 
           castShadow 
-          position={[10, 20, 5]} 
+          position={[5, 15, 5]} 
           intensity={1.0} 
           shadow-mapSize={[2048, 2048]}
-          color="#f4ebcf"
+          color="#ffffff"
         />
 
         <group position={[0, 0, 0]}>
@@ -374,24 +366,22 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Ancient Mossy Stone Base */}
+          {/* Simple Clean Base */}
           <mesh position={[0, -0.28, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.8, 0.28, SQUARE_SIZE * 8.8]} />
-            <meshStandardMaterial color="#2d332e" roughness={1.0} metalness={0.0} />
+            <meshStandardMaterial color="#4d6138" roughness={1.0} metalness={0.0} />
           </mesh>
-          {/* Subtle moss trim */}
           <mesh position={[0, -0.14, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.0, 0.08, SQUARE_SIZE * 9.0]} />
-            <meshStandardMaterial color="#4a5c48" roughness={0.9} metalness={0.1} />
+            <meshStandardMaterial color="#3b4a2b" roughness={1.0} metalness={0.0} />
           </mesh>
-          {/* Deep earth foundation */}
           <mesh position={[0, -0.52, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.4, 0.25, SQUARE_SIZE * 9.4]} />
             <meshStandardMaterial color="#1a1c1a" roughness={1.0} metalness={0.0} />
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.65, 0]} opacity={0.6} scale={20} blur={2.5} far={4} color="#080a08" />
+        <ContactShadows position={[0, -0.65, 0]} opacity={0.4} scale={20} blur={2.0} far={4} color="#000000" />
 
         <OrbitControls 
           enablePan={false}
@@ -402,7 +392,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.5} />
+          <Bloom luminanceThreshold={0.9} mipmapBlur intensity={0.1} />
         </EffectComposer>
       </Canvas>
     </div>
