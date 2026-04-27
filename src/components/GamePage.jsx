@@ -240,15 +240,33 @@ function GameLayout({
           </div>
 
           {/* Captured Pieces */}
-          <div className="sidebar-section">
-            <div className="sidebar-section-title">Captured</div>
-            <div className="captured-pieces">
-              {capturedPieces.black.map((p, i) => (
-                <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
-              ))}
-              {capturedPieces.white.map((p, i) => (
-                <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
-              ))}
+          <div className="sidebar-section" style={{ borderBottom: 'none' }}>
+            <div className="sidebar-section-title">Captured Pieces</div>
+            
+            <div className="captured-subsection">
+              <div className="captured-label">Opponent's</div>
+              <div className="captured-pieces-list">
+                {capturedPieces.black.length === 0 ? (
+                  <span className="no-captures">-</span>
+                ) : (
+                  capturedPieces.black.map((p, i) => (
+                    <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div className="captured-subsection" style={{ marginTop: '1rem' }}>
+              <div className="captured-label">Yours</div>
+              <div className="captured-pieces-list">
+                {capturedPieces.white.length === 0 ? (
+                  <span className="no-captures">-</span>
+                ) : (
+                  capturedPieces.white.map((p, i) => (
+                    <span key={i} className="captured-piece">{getPieceSymbol(p)}</span>
+                  ))
+                )}
+              </div>
             </div>
           </div>
 
