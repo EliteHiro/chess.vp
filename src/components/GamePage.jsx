@@ -142,30 +142,34 @@ function GameLayout({
             fontSize: '1.8rem',
             fontWeight: 900,
             color: 'white',
-            letterSpacing: '-1px'
+            letterSpacing: '2px',
+            display: 'flex',
+            alignItems: 'center'
           }}
         >
           CHESS<span className="logo-dot">.</span>VP
         </button>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           {onlineMatchId && (
-            <span style={{ marginRight: '1rem', color: 'var(--text-secondary)', fontSize: '0.8rem', background: '#333', padding: '4px 8px', borderRadius: '4px' }}>
-              Code: <strong style={{color:'white'}}>{onlineMatchId}</strong>
+            <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', background: 'rgba(0,0,0,0.3)', padding: '4px 12px', borderRadius: '4px', border: '1px solid var(--border-subtle)' }}>
+              CODE: <strong style={{color:'var(--accent-gold)'}}>{onlineMatchId}</strong>
             </span>
           )}
-          <div
-            className={`turn-color-dot ${turn === 'w' ? 'white' : 'black'} active`}
-            style={{ width: 14, height: 14, border: `2px solid ${turn === 'w' ? '#e8e6e3' : '#555'}` }}
-          ></div>
-          <span style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: '0.75rem',
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            color: 'var(--text-secondary)',
-          }}>
-            {turn === 'w' ? 'White' : 'Black'}'s turn
-          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div
+              className={`turn-color-dot ${turn === 'w' ? 'white' : 'black'} active`}
+              style={{ width: 12, height: 12, borderRadius: '50%', background: turn === 'w' ? '#fff' : '#111', border: '1px solid var(--accent-gold)' }}
+            ></div>
+            <span style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: '0.7rem',
+              letterSpacing: '1px',
+              textTransform: 'uppercase',
+              color: 'var(--text-secondary)',
+            }}>
+              {turn === 'w' ? "White's turn" : "Black's turn"}
+            </span>
+          </div>
         </div>
       </div>
 
