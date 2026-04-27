@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // Luxury purple theme — bright and rich, matches website
-  const baseColor = isLight ? '#f5f0ff' : '#6d28d9' // Bright pearl vs Rich amethyst
+  // Big Hero 6 — San Fransokyo palette
+  const baseColor = isLight ? '#e8f4fd' : '#1a3050' // Hologram white vs Deep navy
   let color = baseColor
   
-  if (isSelected) color = '#f59e0b'       // Bright gold selection
-  if (isLastMove) color = isLight ? '#ede0ff' : '#7c3aed'
-  if (isCheck) color = '#dc2626'          // Bright crimson
-  if (hovered && !isSelected) color = isLight ? '#ffffff' : '#7c3aed'
+  if (isSelected) color = '#ffd60a'     // Hiro's gold
+  if (isLastMove) color = isLight ? '#b8e8f5' : '#0d2a40'
+  if (isCheck) color = '#ff2d78'        // Magenta alert
+  if (hovered && !isSelected) color = isLight ? '#ffffff' : '#1e3d5c'
 
   return (
     <group position={position}>
@@ -44,8 +44,8 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color} 
-          roughness={isLight ? 0.08 : 0.06}
-          metalness={isLight ? 0.15 : 0.3}
+          roughness={isLight ? 0.1 : 0.2}
+          metalness={isLight ? 0.05 : 0.3}
         />
       </mesh>
       
@@ -59,7 +59,7 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
       {moveType === 'capture' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[SQUARE_SIZE/2 - 0.15, SQUARE_SIZE/2 - 0.05, 32]} />
-          <meshBasicMaterial color="#8b0000" transparent opacity={0.7} />
+          <meshBasicMaterial color="#ff2d78" transparent opacity={0.7} />
         </mesh>
       )}
     </group>
@@ -68,17 +68,17 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  // White: gleaming bright pearl | Black: vivid royal purple
-  const color = isWhite ? '#ffffff' : '#5b21b6'
+  // White: Baymax white | Black: Deep navy with cyan hologram glow
+  const color = isWhite ? '#f0f8ff' : '#0d1b2e'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: isWhite ? 0.08 : 0.06,
-      metalness: isWhite ? 0.2 : 0.4,
-      emissive: isWhite ? '#c4b5fd' : '#7c3aed',
-      emissiveIntensity: isWhite ? 0.12 : 0.2
+      roughness: isWhite ? 0.1 : 0.15,
+      metalness: isWhite ? 0.12 : 0.5,
+      emissive: isWhite ? '#a0e8f8' : '#00d4ff',
+      emissiveIntensity: isWhite ? 0.08 : 0.25
     }
 
     // Professional Staunton-style multi-layered base
@@ -296,45 +296,45 @@ export default function ChessBoard({
       minHeight: '500px', 
       display: 'flex', 
       position: 'relative',
-      background: 'linear-gradient(180deg, #1a1035, #0f0a20)'
+      background: 'linear-gradient(180deg, #060d1a, #0d1b2e)'
     }}>
       <Canvas 
         shadows 
         camera={{ position: [0, 6, 8], fov: 45 }}
       >
-        {/* Magical Pixar Atmosphere */}
-        <color attach="background" args={['#0f0a20']} />
-        <fog attach="fog" args={['#1a1035', 8, 25]} />
+        {/* Big Hero 6 — San Fransokyo atmosphere */}
+        <color attach="background" args={['#060d1a']} />
+        <fog attach="fog" args={['#060d1a', 10, 28]} />
         
         {/* Magical Sparkle Particles */}
         <group>
           {[...Array(80)].map((_, i) => (
-            <Float key={i} speed={1.5 + Math.random()} rotationIntensity={0.5} floatIntensity={2}>
+            <Float key={i} speed={1.5 + Math.random()} rotationIntensity={0.3} floatIntensity={1.5}>
               <mesh position={[
-                (Math.random() - 0.5) * 20,
+                (Math.random() - 0.5) * 22,
                 Math.random() * 8 + 1,
-                (Math.random() - 0.5) * 20
+                (Math.random() - 0.5) * 22
               ]}>
-                <sphereGeometry args={[0.03 + Math.random() * 0.02, 8, 8]} />
-                <meshBasicMaterial color={['#ffb347', '#a78bfa', '#f472b6', '#60a5fa', '#2dd4bf'][i % 5]} />
+                <sphereGeometry args={[0.02 + Math.random() * 0.03, 8, 8]} />
+                <meshBasicMaterial color={['#00d4ff', '#ff2d78', '#ffd60a', '#00b8d4', '#ffffff'][i % 5]} />
               </mesh>
             </Float>
           ))}
         </group>
 
-        {/* Bright purple-gold luxury lighting */}
-        <ambientLight intensity={0.8} color="#ddd6fe" />
-        <pointLight position={[8, 14, 8]}  color="#fbbf24" intensity={3.0} distance={35} decay={2} />
-        <pointLight position={[-8, 10, -8]} color="#a78bfa" intensity={2.0} distance={30} decay={2} />
-        <pointLight position={[0, 6, 10]}  color="#f9a8d4" intensity={1.0} distance={20} decay={2} />
+        {/* BH6 Electric city lighting */}
+        <ambientLight intensity={0.5} color="#b8e8f5" />
+        <pointLight position={[8, 14, 8]}  color="#00d4ff" intensity={3.0} distance={35} decay={2} />
+        <pointLight position={[-8, 10, -8]} color="#ff2d78" intensity={1.5} distance={28} decay={2} />
+        <pointLight position={[0, 6, 10]}  color="#ffd60a" intensity={0.8} distance={20} decay={2} />
         <pointLight position={[0, 12, 0]} color="#ffffff" intensity={1.5} distance={25} decay={2} />
         
         <directionalLight 
           castShadow 
           position={[5, 15, 5]} 
-          intensity={1.5} 
+          intensity={1.2} 
           shadow-mapSize={[2048, 2048]}
-          color="#f5f0ff"
+          color="#e8f4fd"
         />
 
         <group position={[0, 0, 0]}>
@@ -372,25 +372,25 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Luxury purple board frame with gold border */}
+          {/* BH6 Board frame — dark navy with cyan glow border */}
           <mesh position={[0, -0.28, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.8, 0.28, SQUARE_SIZE * 8.8]} />
-            <meshStandardMaterial color="#1a0a40" roughness={0.15} metalness={0.2} />
+            <meshStandardMaterial color="#060d1a" roughness={0.2} metalness={0.4} />
           </mesh>
-          {/* Gold inlay border */}
+          {/* Cyan hologram border */}
           <mesh position={[0, -0.14, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.0, 0.05, SQUARE_SIZE * 9.0]} />
-            <meshStandardMaterial color="#b8860b" roughness={0.1} metalness={0.8}
-              emissive="#7a5500" emissiveIntensity={0.4} />
+            <meshStandardMaterial color="#00d4ff" roughness={0.1} metalness={0.6}
+              emissive="#00d4ff" emissiveIntensity={0.8} />
           </mesh>
-          {/* Deep violet platform base */}
+          {/* Deep city platform */}
           <mesh position={[0, -0.5, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.4, 0.25, SQUARE_SIZE * 9.4]} />
-            <meshStandardMaterial color="#0f0520" roughness={0.2} metalness={0.1} />
+            <meshStandardMaterial color="#030810" roughness={0.3} metalness={0.2} />
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.55, 0]} opacity={0.6} scale={20} blur={3} far={4} color="#1a1035" />
+        <ContactShadows position={[0, -0.55, 0]} opacity={0.8} scale={20} blur={2} far={4} color="#00d4ff" />
 
         <OrbitControls 
           enablePan={false}
