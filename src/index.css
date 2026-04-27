@@ -599,8 +599,6 @@ body {
   66%       { transform: translateY(5px) rotate(-2deg); }
 }
 
-}
-
 /* ======= SECRET WALL ======= */
 .secret-password-container {
   min-height: 100vh;
