@@ -159,13 +159,13 @@ function GameLayout({
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           {onlineMatchId && (
             <span style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', background: 'rgba(0,0,0,0.3)', padding: '4px 12px', borderRadius: '4px', border: '1px solid var(--border-subtle)' }}>
-              CODE: <strong style={{color:'var(--accent-gold)'}}>{onlineMatchId}</strong>
+              CODE: <strong style={{color:'var(--gold)'}}>{onlineMatchId}</strong>
             </span>
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <div
               className={`turn-color-dot ${turn === 'w' ? 'white' : 'black'} active`}
-              style={{ width: 12, height: 12, borderRadius: '50%', background: turn === 'w' ? '#fff' : '#111', border: '1px solid var(--accent-gold)' }}
+              style={{ width: 12, height: 12, borderRadius: '50%', background: turn === 'w' ? '#fff' : '#111', border: '1px solid var(--gold)' }}
             ></div>
             <span style={{
               fontFamily: 'var(--font-display)',
@@ -367,7 +367,7 @@ function GameLayout({
                   backgroundColor: msg.senderId === matchData?.players?.[playerColor] ? 'rgba(126, 34, 206, 0.3)' : '#222',
                   border: msg.senderId === matchData?.players?.[playerColor] ? '1px solid var(--primary)' : '1px solid #333'
                 }}>
-                  <div style={{ fontSize: '0.6rem', color: 'var(--accent-gold)', marginBottom: '2px' }}>{msg.senderName}</div>
+                  <div style={{ fontSize: '0.6rem', color: 'var(--gold)', marginBottom: '2px' }}>{msg.senderName}</div>
                   <div style={{ color: '#eee' }}>{msg.text}</div>
                 </div>
               ))

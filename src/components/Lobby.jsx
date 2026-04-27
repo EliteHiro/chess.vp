@@ -219,11 +219,11 @@ export default function Lobby() {
         <div style={{
           position: 'fixed', top: '2rem', right: '2rem', zIndex: 1000,
           backgroundColor: 'rgba(30, 30, 30, 0.95)', padding: '1.5rem',
-          borderRadius: 'var(--radius-lg)', border: '1px solid var(--accent-gold)',
+          borderRadius: 'var(--radius-lg)', border: '1px solid var(--gold)',
           boxShadow: '0 10px 30px rgba(0,0,0,0.5)', minWidth: '300px',
           backdropFilter: 'blur(10px)', animation: 'slideIn 0.3s ease-out'
         }}>
-          <h3 style={{ color: 'var(--accent-gold)', marginBottom: '0.5rem' }}>Incoming Challenge!</h3>
+          <h3 style={{ color: 'var(--gold)', marginBottom: '0.5rem' }}>Incoming Challenge!</h3>
           <p style={{ marginBottom: '1.5rem' }}>
             <strong>{incomingChallenge.challengerName}</strong> wants to play with you.
           </p>
@@ -335,7 +335,7 @@ export default function Lobby() {
                     disabled={loading}
                     style={{
                       fontSize: '0.75rem', padding: '0.5rem 1rem',
-                      backgroundColor: 'var(--accent-gold)', color: 'black', border: 'none'
+                      backgroundColor: 'var(--gold)', color: 'black', border: 'none'
                     }}
                   >
                     Challenge
