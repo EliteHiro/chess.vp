@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react'
 import { Chess } from 'chess.js'
+import { playChessSound, initAudio } from '../lib/chessSounds'
 
 // Unicode chess piece symbols
 const PIECE_SYMBOLS = {
@@ -98,21 +99,18 @@ export default function useChessGame() {
         }
 
         // Make the move
-          const move = game.move({ from: selectedSquare, to: square })
-          if (move) {
-            // Play sound based on move type (Max Volume)
-            const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
-            const audio = new Audio(audioPath);
-            audio.volume = 1.0;
-            audio.play().catch(e => console.error('Audio play failed:', audioPath, e));
+        const move = game.move({ from: selectedSquare, to: square })
+        if (move) {
+          // Play sound
+          playChessSound(move, game.inCheck())
 
-            const newGame = new Chess(game.fen())
-            setGame(newGame)
-            setMoveHistory(prev => [...prev, move])
-            setLastMove({ from: selectedSquare, to: square })
-            setSelectedSquare(null)
-            return
-          }
+          const newGame = new Chess(game.fen())
+          setGame(newGame)
+          setMoveHistory(prev => [...prev, move])
+          setLastMove({ from: selectedSquare, to: square })
+          setSelectedSquare(null)
+          return
+        }
       }
 
       // Invalid move — deselect
@@ -137,11 +135,8 @@ export default function useChessGame() {
     })
 
     if (move) {
-      // Play sound for promotion (Max Volume)
-      const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
-      const audio = new Audio(audioPath);
-      audio.volume = 1.0;
-      audio.play().catch(e => console.error('Audio play failed:', audioPath, e));
+      // Play sound for promotion
+      playChessSound(move, game.inCheck())
 
       const newGame = new Chess(game.fen())
       setGame(newGame)

@@ -5,6 +5,7 @@ import useOnlineChessGame from '../hooks/useOnlineChessGame'
 import ChessBoard from './ChessBoard'
 import PromotionModal from './PromotionModal'
 import GameOverModal from './GameOverModal'
+import { initAudio } from '../lib/chessSounds'
 
 export default function GamePage({ mode }) {
   if (mode === 'online') {
@@ -126,7 +127,7 @@ function GameLayout({
   const statusText = getStatusText()
 
   return (
-    <div className="game-page" id="game-page" style={{ position: 'relative' }}>
+    <div className="game-page" id="game-page" style={{ position: 'relative' }} onClick={initAudio}>
       {/* Game Header */}
       <div className="game-header">
         <button

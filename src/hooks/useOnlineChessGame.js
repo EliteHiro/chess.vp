@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import { db } from '../lib/firebase';
 import { ref, onValue, set, get, push, serverTimestamp } from 'firebase/database';
 import { useAuth } from '../contexts/AuthContext';
+import { playChessSound } from '../lib/chessSounds';
 
 export default function useOnlineChessGame(matchId) {
   const { currentUser } = useAuth();
@@ -35,30 +36,23 @@ export default function useOnlineChessGame(matchId) {
         const newGame = new Chess();
         const newHistory = [];
         data.history.forEach(moveStr => {
-        if (m) {
-          newHistory.push(m);
-        }
-      });
+          const m = newGame.move(moveStr);
+          if (m) {
+            newHistory.push(m);
+          }
+        });
 
-      // Play sound for the opponent's move (if history lengthened)
-      if (data.history && data.history.length > game.history().length) {
-        const lastMoveSan = data.history[data.history.length - 1];
-        const tempGame = new Chess();
-        // Play out history to find if last move was a capture or check
-        data.history.slice(0, -1).forEach(h => tempGame.move(h));
-        const moveObj = tempGame.move(lastMoveSan);
-        
-        if (moveObj) {
-          const audioPath = moveObj.captured ? '/capture.mp3' : (tempGame.inCheck() ? '/check.mp3' : '/move.mp3');
-          const audio = new Audio(audioPath);
-          audio.volume = 1.0;
-          audio.play().catch(e => console.error('Audio play failed (Opponent):', audioPath, e));
+        // Play sound for the opponent's move (if history lengthened)
+        if (data.history.length > game.history().length) {
+          const lastMove = newHistory[newHistory.length - 1];
+          if (lastMove) {
+            playChessSound(lastMove, newGame.inCheck());
+          }
         }
-      }
 
-      setGame(newGame);
-      setMoveHistory(newHistory);
-      if (data.lastMove) setLastMove(data.lastMove);
+        setGame(newGame);
+        setMoveHistory(newHistory);
+        if (data.lastMove) setLastMove(data.lastMove);
       } else if (data.fen && data.fen !== game.fen()) {
         setGame(new Chess(data.fen));
       }
@@ -165,11 +159,8 @@ export default function useOnlineChessGame(matchId) {
 
         const move = game.move({ from: selectedSquare, to: square });
         if (move) {
-          // Play sound for our move (Max Volume)
-          const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
-          const audio = new Audio(audioPath);
-          audio.volume = 1.0;
-          audio.play().catch(e => console.error('Audio play failed (Our Move):', audioPath, e));
+          // Play sound for our move
+          playChessSound(move, game.inCheck());
 
           const newGame = new Chess(game.fen()); // Create true clone to rerender
           setGame(newGame);
@@ -198,11 +189,8 @@ export default function useOnlineChessGame(matchId) {
     });
 
     if (move) {
-      // Play sound for promotion (Max Volume)
-      const audioPath = move.captured ? '/capture.mp3' : (game.inCheck() ? '/check.mp3' : '/move.mp3');
-      const audio = new Audio(audioPath);
-      audio.volume = 1.0;
-      audio.play().catch(e => console.error('Audio play failed (Promotion):', audioPath, e));
+      // Play sound for promotion
+      playChessSound(move, game.inCheck());
 
       const newGame = new Chess(game.fen());
       setGame(newGame);
