@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // BH6 — exact colors from movie images
-  const baseColor = isLight ? '#e8f4fd' : '#1e2d52' // Baymax soft white vs Hiro navy
+  // HIRO poster style — electric blue-purple platform on black
+  const baseColor = isLight ? '#5b42db' : '#1a1060' // Electric violet vs Deep indigo
   let color = baseColor
   
-  if (isSelected) color = '#e63329'   // Baymax armor red
-  if (isLastMove) color = isLight ? '#c8dff0' : '#2d4a7a'
-  if (isCheck) color = '#7c5fa0'      // Purple armor accent
-  if (hovered && !isSelected) color = isLight ? '#ffffff' : '#2d4a6b'
+  if (isSelected) color = '#8b5cf6'   // Bright violet selection
+  if (isLastMove) color = isLight ? '#7c5ff0' : '#2d1a8a'
+  if (isCheck) color = '#e63329'      // Red alert
+  if (hovered && !isSelected) color = isLight ? '#7c5ff0' : '#251580'
 
   return (
     <group position={position}>
@@ -43,9 +43,11 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
       >
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
-          color={color} 
-          roughness={isLight ? 0.08 : 0.18}
-          metalness={isLight ? 0.04 : 0.2}
+          color={color}
+          roughness={0.05}
+          metalness={0.3}
+          emissive={isLight ? '#3a28a0' : '#0d0840'}
+          emissiveIntensity={0.6}
         />
       </mesh>
       
@@ -59,7 +61,7 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
       {moveType === 'capture' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[SQUARE_SIZE/2 - 0.15, SQUARE_SIZE/2 - 0.05, 32]} />
-          <meshBasicMaterial color="#7c5fa0" transparent opacity={0.75} />
+          <meshBasicMaterial color="#e63329" transparent opacity={0.8} />
         </mesh>
       )}
     </group>
@@ -68,17 +70,17 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  // White: Baymax body white | Black: Hiro navy + purple armor tint
-  const color = isWhite ? '#f0f8ff' : '#1e2d52'
+  // White: glowing lavender-white | Black: near-black silhouette like HIRO poster
+  const color = isWhite ? '#d4c8ff' : '#0d0820'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: isWhite ? 0.15 : 0.2,
-      metalness: isWhite ? 0.05 : 0.25,
-      emissive: isWhite ? '#c8e8f8' : '#7c5fa0',
-      emissiveIntensity: isWhite ? 0.06 : 0.18
+      roughness: 0.08,
+      metalness: 0.2,
+      emissive: isWhite ? '#6d4ff0' : '#2d1a8a',
+      emissiveIntensity: isWhite ? 0.25 : 0.4
     }
 
     // Professional Staunton-style multi-layered base
@@ -296,15 +298,15 @@ export default function ChessBoard({
       minHeight: '500px', 
       display: 'flex', 
       position: 'relative',
-      background: 'linear-gradient(180deg, #1a4a7a, #3a7ab8)'
+      background: '#000000'
     }}>
       <Canvas 
         shadows 
         camera={{ position: [0, 6, 8], fov: 45 }}
       >
-        {/* BH6 — sky blue atmosphere */}
-        <color attach="background" args={['#1a4a7a']} />
-        <fog attach="fog" args={['#3a7ab8', 12, 28]} />
+        {/* HIRO poster — pure black like the artwork */}
+        <color attach="background" args={['#000000']} />
+        <fog attach="fog" args={['#000000', 14, 30]} />
         
         {/* Magical Sparkle Particles */}
         <group>
@@ -322,19 +324,20 @@ export default function ChessBoard({
           ))}
         </group>
 
-        {/* BH6 sky lighting */}
-        <ambientLight intensity={0.7} color="#b8d8ec" />
-        <pointLight position={[8, 14, 8]}  color="#ffffff" intensity={2.5} distance={35} decay={2} />
-        <pointLight position={[-8, 10, -8]} color="#7ab8d8" intensity={1.2} distance={28} decay={2} />
-        <pointLight position={[0, 6, 10]}  color="#e63329" intensity={0.5} distance={18} decay={2} />
-        <pointLight position={[0, 12, 0]}  color="#f0f8ff" intensity={2.0} distance={22} decay={2} />
+        {/* HIRO poster dramatic lighting — electric blue-purple uplight */}
+        <ambientLight intensity={0.05} color="#000000" />
+        {/* Strong purple uplight from below the board — creates the platform glow */}
+        <pointLight position={[0, -2, 0]}  color="#5b42db" intensity={8.0} distance={10} decay={2} />
+        <pointLight position={[0, 3, 0]}   color="#4a35c8" intensity={4.0} distance={12} decay={2} />
+        <pointLight position={[-4, 0, 4]}  color="#6d4ff0" intensity={2.0} distance={10} decay={2} />
+        <pointLight position={[4, 0, -4]}  color="#3a28a0" intensity={2.0} distance={10} decay={2} />
         
         <directionalLight 
           castShadow 
-          position={[5, 15, 5]} 
-          intensity={1.4} 
+          position={[0, 10, 5]} 
+          intensity={0.3} 
           shadow-mapSize={[2048, 2048]}
-          color="#e8f4fd"
+          color="#8b7ff8"
         />
 
         <group position={[0, 0, 0]}>
@@ -372,25 +375,27 @@ export default function ChessBoard({
             })
           )}
           
-          {/* BH6 Board frame — dark navy + Baymax-red accent */}
+          {/* HIRO poster board — glowing purple platform on black */}
           <mesh position={[0, -0.28, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.8, 0.28, SQUARE_SIZE * 8.8]} />
-            <meshStandardMaterial color="#1e2d52" roughness={0.25} metalness={0.15} />
+            <meshStandardMaterial color="#0d0840" roughness={0.1} metalness={0.2}
+              emissive="#2d1a8a" emissiveIntensity={0.5} />
           </mesh>
-          {/* Red armor trim */}
+          {/* Purple glow trim */}
           <mesh position={[0, -0.14, 0]}>
-            <boxGeometry args={[SQUARE_SIZE * 9.0, 0.05, SQUARE_SIZE * 9.0]} />
-            <meshStandardMaterial color="#e63329" roughness={0.15} metalness={0.3}
-              emissive="#e63329" emissiveIntensity={0.4} />
+            <boxGeometry args={[SQUARE_SIZE * 9.0, 0.06, SQUARE_SIZE * 9.0]} />
+            <meshStandardMaterial color="#5b42db" roughness={0.05} metalness={0.3}
+              emissive="#5b42db" emissiveIntensity={1.2} />
           </mesh>
-          {/* Deep navy base */}
-          <mesh position={[0, -0.5, 0]}>
+          {/* Base platform */}
+          <mesh position={[0, -0.52, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.4, 0.25, SQUARE_SIZE * 9.4]} />
-            <meshStandardMaterial color="#0f1a30" roughness={0.3} metalness={0.1} />
+            <meshStandardMaterial color="#06041a" roughness={0.2} metalness={0.1}
+              emissive="#1a0f60" emissiveIntensity={0.3} />
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.55, 0]} opacity={0.6} scale={20} blur={3} far={4} color="#1a4a7a" />
+        <ContactShadows position={[0, -0.55, 0]} opacity={1} scale={20} blur={1.5} far={4} color="#5b42db" />
 
         <OrbitControls 
           enablePan={false}
@@ -401,7 +406,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={1.4} mipmapBlur intensity={0.25} />
+          <Bloom luminanceThreshold={0.3} mipmapBlur intensity={2.5} />
         </EffectComposer>
       </Canvas>
     </div>

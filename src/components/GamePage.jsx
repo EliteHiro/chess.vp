@@ -127,7 +127,13 @@ function GameLayout({
   const statusText = getStatusText()
 
   return (
-    <div className="game-page" id="game-page" style={{ position: 'relative' }} onClick={initAudio}>
+    <div className="game-page" id="game-page" style={{
+      position: 'relative',
+      backgroundImage: 'url(/bh6_starry_bg.png)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }} onClick={initAudio}>
       {/* Game Header */}
       <div className="game-header">
         <button
