@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // HIRO poster style — electric blue-purple platform on black
-  const baseColor = isLight ? '#5b42db' : '#1a1060' // Electric violet vs Deep indigo
+  // ANCIENT FOREST theme
+  const baseColor = isLight ? '#5c3a21' : '#2b1c11' // Warm wood vs Dark wood
   let color = baseColor
   
-  if (isSelected) color = '#8b5cf6'   // Bright violet selection
-  if (isLastMove) color = isLight ? '#7c5ff0' : '#2d1a8a'
+  if (isSelected) color = '#d4af37'   // Ancient gold selection
+  if (isLastMove) color = isLight ? '#8c7017' : '#5c4a11'
   if (isCheck) color = '#e63329'      // Red alert
-  if (hovered && !isSelected) color = isLight ? '#7c5ff0' : '#251580'
+  if (hovered && !isSelected) color = isLight ? '#8c603a' : '#4a301e'
 
   return (
     <group position={position}>
@@ -44,24 +44,23 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color}
-          roughness={0.05}
-          metalness={0.3}
-          emissive={isLight ? '#3a28a0' : '#0d0840'}
-          emissiveIntensity={0.6}
+          roughness={0.8}
+          metalness={0.1}
+          emissive={isSelected ? '#4a301e' : '#000000'}
         />
       </mesh>
       
       {moveType === 'move' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <circleGeometry args={[0.2, 32]} />
-          <meshBasicMaterial color="#c9960c" transparent opacity={0.75} />
+          <meshBasicMaterial color="#d4af37" transparent opacity={0.6} />
         </mesh>
       )}
       
       {moveType === 'capture' && (
         <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <ringGeometry args={[SQUARE_SIZE/2 - 0.15, SQUARE_SIZE/2 - 0.05, 32]} />
-          <meshBasicMaterial color="#e63329" transparent opacity={0.8} />
+          <meshBasicMaterial color="#e63329" transparent opacity={0.7} />
         </mesh>
       )}
     </group>
@@ -70,17 +69,17 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  // White: glowing lavender-white | Black: near-black silhouette like HIRO poster
-  const color = isWhite ? '#d4c8ff' : '#0d0820'
+  // White: Ancient pale stone | Black: Obsidian/Dark slate
+  const color = isWhite ? '#b8ccbb' : '#1e2420'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: 0.08,
-      metalness: 0.2,
-      emissive: isWhite ? '#6d4ff0' : '#2d1a8a',
-      emissiveIntensity: isWhite ? 0.25 : 0.4
+      roughness: 0.9,
+      metalness: 0.05,
+      emissive: isWhite ? '#1e3623' : '#08120b',
+      emissiveIntensity: 0.2
     }
 
     // Professional Staunton-style multi-layered base
@@ -298,46 +297,44 @@ export default function ChessBoard({
       minHeight: '500px', 
       display: 'flex', 
       position: 'relative',
-      background: '#000000'
+      background: 'transparent' // Let the CSS background image show through
     }}>
       <Canvas 
         shadows 
         camera={{ position: [0, 6, 8], fov: 45 }}
       >
-        {/* HIRO poster — pure black like the artwork */}
-        <color attach="background" args={['#000000']} />
-        <fog attach="fog" args={['#000000', 14, 30]} />
+        {/* Transparent background so HTML background shows */}
+        <fog attach="fog" args={['#08120b', 12, 35]} />
         
-        {/* Magical Sparkle Particles */}
+        {/* Ancient Forest Fireflies */}
         <group>
-          {[...Array(60)].map((_, i) => (
-            <Float key={i} speed={1.2 + Math.random()} rotationIntensity={0.2} floatIntensity={1.5}>
+          {[...Array(50)].map((_, i) => (
+            <Float key={i} speed={1.5 + Math.random()} rotationIntensity={0.2} floatIntensity={2}>
               <mesh position={[
-                (Math.random() - 0.5) * 22,
-                Math.random() * 8 + 1,
-                (Math.random() - 0.5) * 22
+                (Math.random() - 0.5) * 25,
+                Math.random() * 10 + 1,
+                (Math.random() - 0.5) * 25
               ]}>
-                <sphereGeometry args={[0.03 + Math.random() * 0.04, 12, 12]} />
-                <meshBasicMaterial color={['#ffffff', '#e8f4fd', '#e63329', '#7c5fa0', '#b8d8ec'][i % 5]} />
+                <sphereGeometry args={[0.03 + Math.random() * 0.05, 8, 8]} />
+                <meshBasicMaterial color={Math.random() > 0.5 ? '#d4af37' : '#4ade80'} />
               </mesh>
             </Float>
           ))}
         </group>
 
-        {/* HIRO poster dramatic lighting — electric blue-purple uplight */}
-        <ambientLight intensity={0.05} color="#000000" />
-        {/* Strong purple uplight from below the board — creates the platform glow */}
-        <pointLight position={[0, -2, 0]}  color="#5b42db" intensity={8.0} distance={10} decay={2} />
-        <pointLight position={[0, 3, 0]}   color="#4a35c8" intensity={4.0} distance={12} decay={2} />
-        <pointLight position={[-4, 0, 4]}  color="#6d4ff0" intensity={2.0} distance={10} decay={2} />
-        <pointLight position={[4, 0, -4]}  color="#3a28a0" intensity={2.0} distance={10} decay={2} />
+        {/* Ancient magical lighting — green and gold */}
+        <ambientLight intensity={0.4} color="#b8ccbb" />
+        <pointLight position={[8, 14, 8]}  color="#d4af37" intensity={2.5} distance={35} decay={2} />
+        <pointLight position={[-8, 10, -8]} color="#4ade80" intensity={1.5} distance={28} decay={2} />
+        <pointLight position={[0, 6, 10]}  color="#aa8825" intensity={0.8} distance={20} decay={2} />
         
+        {/* Sunbeam effect */}
         <directionalLight 
           castShadow 
-          position={[0, 10, 5]} 
-          intensity={0.3} 
+          position={[10, 20, 5]} 
+          intensity={1.2} 
           shadow-mapSize={[2048, 2048]}
-          color="#8b7ff8"
+          color="#ffeba1"
         />
 
         <group position={[0, 0, 0]}>
@@ -375,27 +372,25 @@ export default function ChessBoard({
             })
           )}
           
-          {/* HIRO poster board — glowing purple platform on black */}
+          {/* Ancient Stone/Wood Board Base */}
           <mesh position={[0, -0.28, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.8, 0.28, SQUARE_SIZE * 8.8]} />
-            <meshStandardMaterial color="#0d0840" roughness={0.1} metalness={0.2}
-              emissive="#2d1a8a" emissiveIntensity={0.5} />
+            <meshStandardMaterial color="#2b1c11" roughness={0.9} metalness={0.1} />
           </mesh>
-          {/* Purple glow trim */}
+          {/* Gold magical trim */}
           <mesh position={[0, -0.14, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.0, 0.06, SQUARE_SIZE * 9.0]} />
-            <meshStandardMaterial color="#5b42db" roughness={0.05} metalness={0.3}
-              emissive="#5b42db" emissiveIntensity={1.2} />
+            <meshStandardMaterial color="#d4af37" roughness={0.4} metalness={0.8}
+              emissive="#aa8825" emissiveIntensity={0.3} />
           </mesh>
-          {/* Base platform */}
+          {/* Stone base */}
           <mesh position={[0, -0.52, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.4, 0.25, SQUARE_SIZE * 9.4]} />
-            <meshStandardMaterial color="#06041a" roughness={0.2} metalness={0.1}
-              emissive="#1a0f60" emissiveIntensity={0.3} />
+            <meshStandardMaterial color="#1a1a1a" roughness={0.9} metalness={0.1} />
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.55, 0]} opacity={1} scale={20} blur={1.5} far={4} color="#5b42db" />
+        <ContactShadows position={[0, -0.65, 0]} opacity={0.8} scale={20} blur={2} far={4} color="#08120b" />
 
         <OrbitControls 
           enablePan={false}
@@ -406,7 +401,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={0.3} mipmapBlur intensity={2.5} />
+          <Bloom luminanceThreshold={0.6} mipmapBlur intensity={1.5} />
         </EffectComposer>
       </Canvas>
     </div>

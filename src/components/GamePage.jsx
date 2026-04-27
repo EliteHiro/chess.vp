@@ -129,7 +129,7 @@ function GameLayout({
   return (
     <div className="game-page" id="game-page" style={{
       position: 'relative',
-      backgroundImage: 'url(/bh6_starry_bg.png)',
+      backgroundImage: 'url(/ancient_forest_game_bg.png)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat'
