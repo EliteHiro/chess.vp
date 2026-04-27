@@ -293,33 +293,31 @@ export default function ChessBoard({
       <Canvas 
         shadows 
         camera={{ position: [0, 6, 8], fov: 45 }}
-        style={{ background: 'transparent' }}
+        style={{ background: '#051205' }}
       >
         {/* Ancient Woods Background */}
         <color attach="background" args={['#051205']} />
         <fog attach="fog" args={['#051205', 4, 18]} />
         
         {/* Fireflies (Floating Green Glows) */}
-        <Stars radius={50} depth={20} count={2000} factor={3} saturation={1} fade speed={1.5} />
-        <pointLight position={[-5, 2, -5]} color="#4ade80" intensity={0.5} />
-        <pointLight position={[5, 3, -8]} color="#4ade80" intensity={0.5} />
+        <Stars radius={50} depth={20} count={3000} factor={4} saturation={1} fade speed={2} />
+        <pointLight position={[-5, 2, -5]} color="#4ade80" intensity={1.5} />
+        <pointLight position={[5, 3, -8]} color="#4ade80" intensity={1.5} />
 
-        {/* Ancient Stone Ruins & Vegetation */}
-        <group position={[0, -2, -12]}>
-          {/* Main Pillars */}
-          <mesh position={[-10, 4, -5]} rotation={[0, 0.4, 0.1]}>
-            <boxGeometry args={[2.5, 12, 2.5]} />
-            <meshStandardMaterial color="#2a352a" roughness={1} />
+        {/* MASSIVE Ancient Pillars (Theme Confirmation) */}
+        <group position={[0, -2, -15]}>
+          <mesh position={[-15, 8, 0]}>
+            <boxGeometry args={[4, 20, 4]} />
+            <meshStandardMaterial color="#1a2e23" roughness={1} />
           </mesh>
-          <mesh position={[12, 5, -8]} rotation={[0, -0.2, -0.1]}>
-            <boxGeometry args={[3, 15, 3]} />
-            <meshStandardMaterial color="#1e2a1e" roughness={1} />
+          <mesh position={[15, 8, 0]}>
+            <boxGeometry args={[4, 20, 4]} />
+            <meshStandardMaterial color="#1a2e23" roughness={1} />
           </mesh>
-          
-          {/* Broken Ruins */}
-          <mesh position={[0, 1, -15]} rotation={[0.5, 0.5, 0]}>
-            <boxGeometry args={[4, 2, 4]} />
-            <meshStandardMaterial color="#2d3a2d" />
+          {/* Stone Archway */}
+          <mesh position={[0, 16, 0]}>
+            <boxGeometry args={[34, 4, 4]} />
+            <meshStandardMaterial color="#1a2e23" roughness={1} />
           </mesh>
         </group>
 
