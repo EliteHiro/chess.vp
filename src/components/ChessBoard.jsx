@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // Luxury purple theme — matches website palette
-  const baseColor = isLight ? '#e8deff' : '#2d0e6e' // Pearl lavender vs Deep royal violet
+  // Luxury purple theme — bright and rich, matches website
+  const baseColor = isLight ? '#f5f0ff' : '#6d28d9' // Bright pearl vs Rich amethyst
   let color = baseColor
   
-  if (isSelected) color = '#c9960c'       // Antique gold selection
-  if (isLastMove) color = isLight ? '#d4c4ff' : '#4a1a9e'
-  if (isCheck) color = '#8b0000'          // Deep crimson
-  if (hovered && !isSelected) color = isLight ? '#f0e8ff' : '#3d12a0'
+  if (isSelected) color = '#f59e0b'       // Bright gold selection
+  if (isLastMove) color = isLight ? '#ede0ff' : '#7c3aed'
+  if (isCheck) color = '#dc2626'          // Bright crimson
+  if (hovered && !isSelected) color = isLight ? '#ffffff' : '#7c3aed'
 
   return (
     <group position={position}>
@@ -44,8 +44,8 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color} 
-          roughness={isLight ? 0.12 : 0.08}
-          metalness={isLight ? 0.1 : 0.25}
+          roughness={isLight ? 0.08 : 0.06}
+          metalness={isLight ? 0.15 : 0.3}
         />
       </mesh>
       
@@ -68,17 +68,17 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  // White: luminous pearl with lavender tint | Black: deep obsidian violet
-  const color = isWhite ? '#f0ecff' : '#150830'
+  // White: gleaming bright pearl | Black: vivid royal purple
+  const color = isWhite ? '#ffffff' : '#5b21b6'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: isWhite ? 0.12 : 0.08,
-      metalness: isWhite ? 0.15 : 0.35,
-      emissive: isWhite ? '#9f7aea' : '#4c1d95',
-      emissiveIntensity: isWhite ? 0.04 : 0.1
+      roughness: isWhite ? 0.08 : 0.06,
+      metalness: isWhite ? 0.2 : 0.4,
+      emissive: isWhite ? '#c4b5fd' : '#7c3aed',
+      emissiveIntensity: isWhite ? 0.12 : 0.2
     }
 
     // Professional Staunton-style multi-layered base
@@ -322,18 +322,19 @@ export default function ChessBoard({
           ))}
         </group>
 
-        {/* Purple-gold luxury lighting — matches website theme */}
-        <ambientLight intensity={0.35} color="#c4b5fd" />
-        <pointLight position={[8, 14, 8]}  color="#ffb347" intensity={2.0} distance={35} decay={2} />
-        <pointLight position={[-8, 10, -8]} color="#a78bfa" intensity={1.4} distance={30} decay={2} />
-        <pointLight position={[0, 6, 10]}  color="#f472b6" intensity={0.5} distance={20} decay={2} />
+        {/* Bright purple-gold luxury lighting */}
+        <ambientLight intensity={0.8} color="#ddd6fe" />
+        <pointLight position={[8, 14, 8]}  color="#fbbf24" intensity={3.0} distance={35} decay={2} />
+        <pointLight position={[-8, 10, -8]} color="#a78bfa" intensity={2.0} distance={30} decay={2} />
+        <pointLight position={[0, 6, 10]}  color="#f9a8d4" intensity={1.0} distance={20} decay={2} />
+        <pointLight position={[0, 12, 0]} color="#ffffff" intensity={1.5} distance={25} decay={2} />
         
         <directionalLight 
           castShadow 
           position={[5, 15, 5]} 
-          intensity={1.0} 
+          intensity={1.5} 
           shadow-mapSize={[2048, 2048]}
-          color="#e0d0ff"
+          color="#f5f0ff"
         />
 
         <group position={[0, 0, 0]}>
