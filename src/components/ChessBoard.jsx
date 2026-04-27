@@ -321,21 +321,19 @@ export default function ChessBoard({
           ))}
         </group>
 
-        {/* Dreamy Pixar Lighting */}
-        <ambientLight intensity={0.6} />
-        <pointLight position={[10, 15, 10]} color="#ffb347" intensity={3} />
-        <pointLight position={[-10, 10, -10]} color="#a78bfa" intensity={2} />
-        <pointLight position={[0, 8, 8]} color="#f472b6" intensity={1} />
+        {/* Balanced Pixar Lighting — not too bright up close */}
+        <ambientLight intensity={0.35} />
+        <pointLight position={[10, 15, 10]} color="#ffb347" intensity={1.2} distance={30} decay={2} />
+        <pointLight position={[-10, 10, -10]} color="#a78bfa" intensity={0.8} distance={25} decay={2} />
+        <pointLight position={[0, 8, 8]} color="#f472b6" intensity={0.4} distance={20} decay={2} />
         
         <directionalLight 
           castShadow 
           position={[5, 15, 5]} 
-          intensity={1.5} 
+          intensity={1.0} 
           shadow-mapSize={[1024, 1024]}
           color="#fff5ee"
         />
-        
-        <Environment preset="city" />
 
         <group position={[0, 0, 0]}>
           {RANKS.map((rank, rowIndex) =>
@@ -394,7 +392,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.8} />
+          <Bloom luminanceThreshold={1.5} mipmapBlur intensity={0.3} />
         </EffectComposer>
       </Canvas>
     </div>
