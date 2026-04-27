@@ -13,14 +13,14 @@ const BOARD_OFFSET = (8 * SQUARE_SIZE) / 2 - (SQUARE_SIZE / 2)
 function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelected, isLastMove, isCheck }) {
   const [hovered, setHovered] = useState(false)
   
-  // ENCHANTED FOREST theme
-  const baseColor = isLight ? '#2a4d36' : '#0a120e' // Glowing Jade vs Deep Obsidian
+  // ANCIENT MOSSY STONE theme
+  const baseColor = isLight ? '#5a6e5a' : '#2d332e' // Mossy light stone vs Dark slate
   let color = baseColor
   
-  if (isSelected) color = '#d4af37'   // Magical gold selection
-  if (isLastMove) color = isLight ? '#4ade80' : '#1e3623'
-  if (isCheck) color = '#ff3333'      // Crimson alert
-  if (hovered && !isSelected) color = isLight ? '#4ade80' : '#1b2e23'
+  if (isSelected) color = '#8f9c6d'   // Pale moss selection
+  if (isLastMove) color = isLight ? '#71826b' : '#3c453d'
+  if (isCheck) color = '#b54338'      // Rusted red alert
+  if (hovered && !isSelected) color = isLight ? '#6a7d6a' : '#39403a'
 
   return (
     <group position={position}>
@@ -44,10 +44,10 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
         <boxGeometry args={[SQUARE_SIZE, 0.2, SQUARE_SIZE]} />
         <meshStandardMaterial 
           color={color}
-          roughness={isLight ? 0.2 : 0.1}
-          metalness={isLight ? 0.3 : 0.8}
-          emissive={isLight ? '#1e3623' : '#000000'}
-          emissiveIntensity={0.8}
+          roughness={0.95}
+          metalness={0.05}
+          emissive={isSelected ? '#1f2b21' : '#000000'}
+          emissiveIntensity={0.5}
         />
       </mesh>
       
@@ -70,17 +70,17 @@ function BoardSquare({ position, isLight, squareId, onClick, moveType, isSelecte
 
 function Piece3D({ piece, position, squareId, onClick }) {
   const isWhite = piece.color === 'w'
-  // White: Ancient Glowing Gold | Black: Polished Obsidian
-  const color = isWhite ? '#ffd700' : '#111513'
+  // White: Weathered pale stone | Black: Dark mossy slate
+  const color = isWhite ? '#b5bcae' : '#222824'
   
   const renderPieceModel = () => {
     const type = piece.type.toLowerCase()
     const materialProps = {
       color: color,
-      roughness: isWhite ? 0.1 : 0.05,
-      metalness: isWhite ? 0.9 : 0.95,
-      emissive: isWhite ? '#aa8825' : '#1e3623',
-      emissiveIntensity: isWhite ? 0.6 : 0.4
+      roughness: 0.95,
+      metalness: 0.05,
+      emissive: '#000000',
+      emissiveIntensity: 0
     }
 
     // Professional Staunton-style multi-layered base
@@ -323,20 +323,20 @@ export default function ChessBoard({
           ))}
         </group>
 
-        {/* Enchanted lighting — intense green, gold, and magical cyan */}
-        <ambientLight intensity={0.6} color="#b8ccbb" />
-        <pointLight position={[8, 12, 8]}  color="#ffd700" intensity={3.5} distance={35} decay={2} />
-        <pointLight position={[-8, 10, -8]} color="#4ade80" intensity={2.5} distance={28} decay={2} />
-        <pointLight position={[0, 6, 10]}  color="#d4af37" intensity={1.5} distance={20} decay={2} />
-        <pointLight position={[0, -2, 0]}  color="#4ade80" intensity={4.0} distance={15} decay={2} />
+        {/* Atmospheric ancient forest lighting — softer, less intense */}
+        <ambientLight intensity={0.7} color="#a1b3a3" />
+        <pointLight position={[8, 12, 8]}  color="#e8e1cd" intensity={1.5} distance={35} decay={2} />
+        <pointLight position={[-8, 10, -8]} color="#7c947c" intensity={1.2} distance={28} decay={2} />
+        <pointLight position={[0, 6, 10]}  color="#b09f82" intensity={0.8} distance={20} decay={2} />
+        <pointLight position={[0, -2, 0]}  color="#5a6e5a" intensity={1.0} distance={15} decay={2} />
         
-        {/* Sunbeam effect */}
+        {/* Soft Sunbeam effect */}
         <directionalLight 
           castShadow 
           position={[10, 20, 5]} 
-          intensity={1.8} 
+          intensity={1.0} 
           shadow-mapSize={[2048, 2048]}
-          color="#ffeba1"
+          color="#f4ebcf"
         />
 
         <group position={[0, 0, 0]}>
@@ -374,26 +374,24 @@ export default function ChessBoard({
             })
           )}
           
-          {/* Enchanted Obsidian Board Base */}
+          {/* Ancient Mossy Stone Base */}
           <mesh position={[0, -0.28, 0]} receiveShadow>
             <boxGeometry args={[SQUARE_SIZE * 8.8, 0.28, SQUARE_SIZE * 8.8]} />
-            <meshStandardMaterial color="#0a120e" roughness={0.2} metalness={0.6} />
+            <meshStandardMaterial color="#2d332e" roughness={1.0} metalness={0.0} />
           </mesh>
-          {/* Glowing emerald magic trim */}
+          {/* Subtle moss trim */}
           <mesh position={[0, -0.14, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.0, 0.08, SQUARE_SIZE * 9.0]} />
-            <meshStandardMaterial color="#4ade80" roughness={0.1} metalness={0.8}
-              emissive="#4ade80" emissiveIntensity={1.5} />
+            <meshStandardMaterial color="#4a5c48" roughness={0.9} metalness={0.1} />
           </mesh>
-          {/* Deep stone base */}
+          {/* Deep earth foundation */}
           <mesh position={[0, -0.52, 0]}>
             <boxGeometry args={[SQUARE_SIZE * 9.4, 0.25, SQUARE_SIZE * 9.4]} />
-            <meshStandardMaterial color="#050a08" roughness={0.8} metalness={0.2} 
-              emissive="#1e3623" emissiveIntensity={0.4} />
+            <meshStandardMaterial color="#1a1c1a" roughness={1.0} metalness={0.0} />
           </mesh>
         </group>
 
-        <ContactShadows position={[0, -0.65, 0]} opacity={1.0} scale={20} blur={2.5} far={4} color="#4ade80" />
+        <ContactShadows position={[0, -0.65, 0]} opacity={0.6} scale={20} blur={2.5} far={4} color="#080a08" />
 
         <OrbitControls 
           enablePan={false}
@@ -404,7 +402,7 @@ export default function ChessBoard({
         />
 
         <EffectComposer disableNormalPass>
-          <Bloom luminanceThreshold={0.4} mipmapBlur intensity={2.2} />
+          <Bloom luminanceThreshold={0.8} mipmapBlur intensity={0.5} />
         </EffectComposer>
       </Canvas>
     </div>
