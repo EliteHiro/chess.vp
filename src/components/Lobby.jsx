@@ -89,6 +89,10 @@ export default function Lobby() {
           w: currentUser.uid,
           b: null
         },
+        playerNames: {
+          w: currentUser.displayName || currentUser.email,
+          b: null
+        },
         createdBy: currentUser.uid,
         createdAt: Date.now()
       });
@@ -131,6 +135,7 @@ export default function Lobby() {
       if (matchData.status === 'waiting' && matchData.players.w !== currentUser.uid) {
         if (!matchData.players.b) {
           await set(ref(db, `matches/${code}/players/b`), currentUser.uid);
+          await set(ref(db, `matches/${code}/playerNames/b`), currentUser.displayName || currentUser.email);
           await set(ref(db, `matches/${code}/status`), 'playing');
         } else if (matchData.players.b !== currentUser.uid) {
           setError('Match is already full.');
@@ -183,6 +188,7 @@ export default function Lobby() {
 
       // Claim the black spot
       await set(ref(db, `matches/${matchId}/players/b`), currentUser.uid);
+      await set(ref(db, `matches/${matchId}/playerNames/b`), currentUser.displayName || currentUser.email);
       await set(ref(db, `matches/${matchId}/status`), 'playing');
 
       // Delete the challenge

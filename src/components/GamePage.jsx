@@ -408,6 +408,7 @@ function GameLayout({
           turn={turn}
           playerColor={playerColor}
           mode={mode}
+          opponentName={matchData?.playerNames?.[playerColor === 'w' ? 'b' : 'w']}
           onNewGame={reset}
           onGoHome={() => navigate('/')}
           onViewSecret={() => navigate('/secret', { state: { authorized: true } })}

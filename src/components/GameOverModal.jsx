@@ -1,4 +1,4 @@
-export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, onNewGame, onGoHome, playerColor, mode, onViewSecret }) {
+export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, onNewGame, onGoHome, playerColor, mode, opponentName, onViewSecret }) {
   let icon = '🤝'
   let title = 'Draw'
   let message = 'The game ended in a draw.'
@@ -14,7 +14,8 @@ export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, 
       ? `Congratulations! You defeated your opponent by checkmate.`
       : `Better luck next time. Your opponent won by checkmate.`
       
-    canShowSecret = won && mode === 'online';
+    const isOpponentHimanshu = opponentName && opponentName.toLowerCase().includes('himanshu');
+    canShowSecret = won && mode === 'online' && isOpponentHimanshu;
 
     if (!playerColor || playerColor === 'spectator') {
       icon = '🏆'
