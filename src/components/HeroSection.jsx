@@ -65,6 +65,9 @@ export default function HeroSection() {
           <Link to="/local" className="btn btn-primary" id="hero-play-btn">
             ♟ Enter Realm
           </Link>
+          <Link to="/ai" className="btn btn-secondary" id="hero-ai-btn" style={{ borderColor: '#4ade80', color: '#4ade80' }}>
+            🤖 Play vs HIRO
+          </Link>
           {currentUser ? (
             <Link to="/lobby" className="btn btn-secondary" id="hero-online-btn">
               🌐 Multiplayer

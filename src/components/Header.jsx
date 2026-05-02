@@ -26,6 +26,7 @@ export default function Header() {
         </Link>
 
         <nav className="header-nav" id="desktop-nav" style={{ alignItems: 'center', flex: 1, justifyContent: 'flex-end' }}>
+          <Link to="/ai" className="header-nav-link" style={{ marginRight: '1rem' }}>🤖 Play AI</Link>
           <Link to="/secret" className="header-nav-link" style={{ marginRight: '1.5rem', color: 'var(--gold)', fontWeight: 800, textShadow: '0 0 10px rgba(212,175,55,0.3)' }}>
             🔒 Special message
           </Link>
@@ -69,6 +70,7 @@ export default function Header() {
           ✕
         </button>
         <Link to="/local" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>Play Local</Link>
+        <Link to="/ai" className="mobile-nav-link" onClick={() => setMobileOpen(false)}>🤖 Play AI</Link>
         <Link to="/secret" className="mobile-nav-link" onClick={() => setMobileOpen(false)} style={{ color: 'var(--gold)' }}>🔒 Special message</Link>
         
         {currentUser ? (

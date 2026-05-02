@@ -1287,3 +1287,529 @@ body {
   }
 }
 
+/* ================================================
+   AI DIFFICULTY SELECTOR
+   ================================================ */
+
+.ai-select-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at center, #122416 0%, #08120b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.ai-select-container {
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  animation: popIn 0.6s ease-out;
+}
+
+.ai-select-header {
+  margin-bottom: 3rem;
+}
+
+.ai-hiro-avatar {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  filter: drop-shadow(0 0 20px rgba(74, 222, 128, 0.5));
+  animation: float 4s ease-in-out infinite;
+}
+
+.ai-select-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: 3px;
+  margin-bottom: 0.8rem;
+}
+
+.ai-select-subtitle {
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 1.05rem;
+}
+
+.ai-difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.ai-difficulty-card {
+  background: var(--bg-panel);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.5rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-difficulty-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--accent, var(--gold)), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ai-difficulty-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--accent, var(--gold));
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 30px color-mix(in srgb, var(--accent, var(--gold)) 30%, transparent);
+}
+
+.ai-difficulty-card:hover::before {
+  opacity: 0.08;
+}
+
+.ai-diff-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.ai-diff-name {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--accent, var(--gold));
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+  position: relative;
+  z-index: 1;
+}
+
+.ai-diff-desc {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  font-family: var(--font-body);
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================================
+   HIRO GAME BUBBLE (in-game messages)
+   ================================================ */
+
+.hiro-game-bubble {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  background: rgba(15, 25, 18, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--green-bright);
+  border-radius: var(--radius-full);
+  padding: 0.6rem 1.4rem;
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.2);
+  animation: hiroSlideIn 0.4s ease-out;
+  max-width: 90vw;
+}
+
+@keyframes hiroSlideIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+.hiro-bubble-avatar {
+  font-size: 1.4rem;
+}
+
+.hiro-bubble-text {
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================================================
+   HIRO THINKING BAR
+   ================================================ */
+
+.hiro-thinking-bar {
+  position: fixed;
+  top: 80px;
+  right: 2rem;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(15, 25, 18, 0.9);
+  border: 1px solid var(--border-gold);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1.2rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  letter-spacing: 1px;
+}
+
+.hiro-thinking-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.hiro-thinking-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: hiroDot 1.4s infinite ease-in-out;
+}
+
+.hiro-thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.hiro-thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes hiroDot {
+  0%, 80%, 100% { transform: scale(0.5); opacity: 0.3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* ================================================
+   HIRO CHAT WIDGET
+   ================================================ */
+
+.hiro-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid var(--green-bright);
+  background: linear-gradient(135deg, #1a2e1e, #0f1f12);
+  color: white;
+  font-size: 1.6rem;
+  cursor: pointer;
+  z-index: 8000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.3);
+  transition: all 0.3s ease;
+}
+
+.hiro-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(74, 222, 128, 0.5);
+}
+
+.hiro-fab.open {
+  background: rgba(30, 54, 35, 0.9);
+  font-size: 1.2rem;
+}
+
+.hiro-fab-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--green-bright);
+  border: 2px solid var(--bg-deep);
+  box-shadow: 0 0 10px var(--green-bright);
+  animation: hiroPulse 2s infinite;
+}
+
+@keyframes hiroPulse {
+  0%, 100% { box-shadow: 0 0 5px var(--green-bright); }
+  50% { box-shadow: 0 0 15px var(--green-bright); }
+}
+
+/* Chat Panel */
+.hiro-chat-panel {
+  position: fixed;
+  bottom: 5rem;
+  left: 1.5rem;
+  width: min(380px, calc(100vw - 3rem));
+  height: min(520px, calc(100vh - 8rem));
+  background: linear-gradient(180deg, #0f1f12 0%, #0a150c 100%);
+  border: 1px solid var(--green-bright);
+  border-radius: var(--radius-lg);
+  z-index: 8000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 10px 50px rgba(0,0,0,0.8), 0 0 30px rgba(74, 222, 128, 0.15);
+  animation: hiroChatOpen 0.3s ease-out;
+}
+
+@keyframes hiroChatOpen {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hiro-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.2rem;
+  background: rgba(74, 222, 128, 0.08);
+  border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.hiro-chat-avatar {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.5));
+}
+
+.hiro-chat-name {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--green-bright);
+  letter-spacing: 2px;
+}
+
+.hiro-chat-status {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+}
+
+.hiro-chat-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  transition: color 0.2s;
+}
+
+.hiro-chat-close:hover {
+  color: var(--green-bright);
+}
+
+/* Messages */
+.hiro-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.hiro-chat-messages::-webkit-scrollbar { width: 4px; }
+.hiro-chat-messages::-webkit-scrollbar-thumb { background: rgba(74, 222, 128, 0.3); border-radius: 4px; }
+
+.hiro-msg {
+  display: flex;
+  gap: 0.5rem;
+  max-width: 88%;
+}
+
+.hiro-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.hiro-msg-avatar {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.hiro-msg-bubble {
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  font-family: var(--font-body);
+}
+
+.hiro-msg.hiro .hiro-msg-bubble {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  color: var(--text-primary);
+}
+
+.hiro-msg.user .hiro-msg-bubble {
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: var(--text-primary);
+}
+
+/* Typing animation */
+.hiro-typing {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  padding: 0.8rem 1.2rem !important;
+}
+
+.hiro-typing span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-bright);
+  animation: hiroDot 1.4s infinite ease-in-out;
+}
+
+.hiro-typing span:nth-child(2) { animation-delay: 0.2s; }
+.hiro-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+/* Quick Actions */
+.hiro-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid rgba(74, 222, 128, 0.1);
+}
+
+.hiro-quick-btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(74, 222, 128, 0.05);
+  color: var(--green-bright);
+  font-size: 0.7rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.hiro-quick-btn:hover {
+  background: rgba(74, 222, 128, 0.15);
+  border-color: var(--green-bright);
+}
+
+/* Input bar */
+.hiro-chat-input-bar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid rgba(74, 222, 128, 0.15);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.hiro-chat-input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.hiro-chat-input:focus {
+  border-color: var(--green-bright);
+}
+
+.hiro-chat-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.hiro-chat-send {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #2d6a3e, var(--green-bright));
+  color: var(--bg-deep);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.hiro-chat-send:hover:not(:disabled) {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+}
+
+.hiro-chat-send:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ================================================
+   RESPONSIVE — AI & HIRO MOBILE
+   ================================================ */
+
+@media (max-width: 768px) {
+  .ai-difficulty-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .ai-difficulty-card {
+    padding: 1.8rem 1.2rem;
+  }
+
+  .ai-diff-icon {
+    font-size: 2.2rem;
+  }
+
+  .ai-select-title {
+    font-size: 1.8rem;
+  }
+
+  .hiro-fab {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  .hiro-chat-panel {
+    bottom: 4.5rem;
+    left: 0.5rem;
+    width: calc(100vw - 1rem);
+    height: min(450px, calc(100vh - 6rem));
+  }
+
+  .hiro-game-bubble {
+    top: 60px;
+    padding: 0.5rem 1rem;
+  }
+
+  .hiro-bubble-text {
+    font-size: 0.75rem;
+  }
+
+  .hiro-thinking-bar {
+    top: 60px;
+    right: 1rem;
+    font-size: 0.65rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+

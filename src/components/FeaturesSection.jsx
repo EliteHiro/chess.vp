@@ -26,9 +26,9 @@ export default function FeaturesSection() {
       description: 'No sign-up required. No downloads needed. Jump straight into a game and start playing within seconds.',
     },
     {
-      icon: '📱',
-      title: 'Responsive',
-      description: 'Play on any device — desktop, tablet, or mobile. The board adapts perfectly to any screen size.',
+      icon: '🤖',
+      title: 'HIRO AI',
+      description: 'Meet HIRO — your AI chess buddy! Play against three difficulty levels and chat with HIRO to learn chess strategies.',
     },
   ]
 
