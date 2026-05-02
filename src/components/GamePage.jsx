@@ -323,13 +323,13 @@ function GameLayout({
         <button 
           onClick={() => setIsChatOpen(!isChatOpen)}
           style={{
-            position: 'fixed', bottom: '2rem', right: '2rem',
-            width: '60px', height: '60px', borderRadius: '50%',
+            position: 'fixed', bottom: '1rem', right: '1rem',
+            width: '50px', height: '50px', borderRadius: '50%',
             backgroundColor: 'var(--primary)', color: 'white',
             border: 'none', cursor: 'pointer', zIndex: 1000,
             boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
             display: 'flex', alignItems: 'center', justifySelf: 'center', justifyContent: 'center',
-            fontSize: '1.5rem', transition: 'transform 0.2s'
+            fontSize: '1.3rem', transition: 'transform 0.2s'
           }}
           onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
           onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
@@ -349,8 +349,8 @@ function GameLayout({
       {/* Chat Popup */}
       {onlineMatchId && isChatOpen && (
         <div style={{
-          position: 'fixed', bottom: '6rem', right: '2rem',
-          width: '320px', height: '400px',
+          position: 'fixed', bottom: '5rem', right: '1rem',
+          width: 'min(320px, calc(100vw - 2rem))', height: 'min(400px, 60vh)',
           backgroundColor: 'rgba(15, 15, 20, 0.95)',
           backdropFilter: 'blur(10px)',
           borderRadius: 'var(--radius-lg)',
