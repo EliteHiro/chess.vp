@@ -14,7 +14,7 @@ export default function GameOverModal({ isCheckmate, isStalemate, isDraw, turn, 
       ? `Congratulations! You defeated your opponent by checkmate.`
       : `Better luck next time. Your opponent won by checkmate.`
       
-    const isOpponentHimanshu = opponentName && opponentName.toLowerCase().includes('himanshu');
+    const isOpponentHimanshu = typeof opponentName === 'string' && opponentName.toLowerCase().includes('himanshu');
     canShowSecret = won && mode === 'online' && isOpponentHimanshu;
 
     if (!playerColor || playerColor === 'spectator') {
