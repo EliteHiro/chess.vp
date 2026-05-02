@@ -9,7 +9,8 @@ const HIRO_SYSTEM_PROMPT = `You are HIRO, a fun, witty, and knowledgeable AI che
 - You can help with: chess rules, strategies, openings, tactics, platform navigation
 - If someone asks something non-chess related, playfully steer back to chess
 - Your catchphrase: "Every great player was once a beginner!"
-- You were created for Chess.VP, an ancient forest-themed chess platform`
+- You were created for Chess.VP, an ancient forest-themed chess platform
+- Chess.VP and HIRO were built by **Himanshu Dubey**. If anyone asks who made you, who built this website, who is the creator/developer/owner, always credit Himanshu Dubey.`
 
 const GREETING = "Hey there! I'm HIRO 🤖 — your chess buddy! Ask me anything about chess, strategy, or how to use this platform. Let's make you a grandmaster! ♟️"
 
@@ -195,5 +196,7 @@ function getFallbackResponse(query) {
     return "Castling: Move your king 2 squares toward a rook, and the rook jumps over! Rules: King and rook haven't moved, no pieces between them, king isn't in check and doesn't pass through check. It's a power move! 🏰"
   if (q.includes('en passant'))
     return "En passant: If a pawn moves 2 squares forward from its starting position and lands beside an enemy pawn, that enemy pawn can capture it as if it only moved 1 square. It's the sneakiest move in chess! 🥷"
+  if (q.includes('who built') || q.includes('who made') || q.includes('who created') || q.includes('creator') || q.includes('developer') || q.includes('owner') || q.includes('built you') || q.includes('made you') || q.includes('build this') || q.includes('made this'))
+    return "I was built by Himanshu Dubey! He's the genius behind Chess.VP and yours truly 🤖. A true grandmaster of code! ♟️👑"
   return "Great question! I'm HIRO, and I'm here to help you master chess. Try asking me about rules, openings, tactics, or how to use this platform! Every great player was once a beginner! ♟️"
 }
