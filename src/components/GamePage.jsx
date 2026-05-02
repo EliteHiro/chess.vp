@@ -17,7 +17,13 @@ export default function GamePage({ mode }) {
 function LocalGameWrapper() {
   const gameProps = useChessGame()
   const navigate = useNavigate()
-  return <GameLayout {...gameProps} onBack={() => navigate('/')} />
+  return (
+    <GameLayout
+      {...gameProps}
+      onBack={() => navigate('/')}
+      onGoHome={() => navigate('/')}
+    />
+  )
 }
 
 function OnlineGameWrapper() {
@@ -26,10 +32,12 @@ function OnlineGameWrapper() {
   const gameProps = useOnlineChessGame(matchId)
   
   return (
-    <GameLayout 
-      {...gameProps} 
-      onBack={() => navigate('/lobby')} 
-      onlineMatchId={matchId} 
+    <GameLayout
+      {...gameProps}
+      onBack={() => navigate('/lobby')}
+      onGoHome={() => navigate('/')}
+      onViewSecret={() => navigate('/secret', { state: { authorized: true } })}
+      onlineMatchId={matchId}
     />
   )
 }
@@ -54,6 +62,8 @@ function GameLayout({
   undo,
   reset,
   onBack,
+  onGoHome,
+  onViewSecret,
   onlineMatchId,
   matchData,
   playerColor,
@@ -407,11 +417,11 @@ function GameLayout({
           isDraw={isDraw}
           turn={turn}
           playerColor={playerColor}
-          mode={mode}
+          mode={onlineMatchId ? 'online' : 'local'}
           opponentName={matchData?.playerNames?.[playerColor === 'w' ? 'b' : 'w']}
           onNewGame={reset}
-          onGoHome={() => navigate('/')}
-          onViewSecret={() => navigate('/secret', { state: { authorized: true } })}
+          onGoHome={onGoHome}
+          onViewSecret={onViewSecret}
         />
       )}
     </div>
