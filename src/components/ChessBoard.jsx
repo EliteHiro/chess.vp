@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, Text, Billboard, Environment, ContactShadows, Stars, Float } from '@react-three/drei'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -276,7 +276,14 @@ export default function ChessBoard({
   onSquareClick,
   isGameOver,
 }) {
-  
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const validMoveSquares = useMemo(() => {
     if (!selectedSquare) return new Map()
     const moves = getValidMoves(selectedSquare)
@@ -287,18 +294,23 @@ export default function ChessBoard({
     return map
   }, [selectedSquare, getValidMoves])
 
+  // On mobile: top-down camera with wider FOV so board fills the screen
+  const cameraProps = isMobile
+    ? { position: [0, 10, 4], fov: 55 }
+    : { position: [0, 6, 8], fov: 45 }
+
    return (
     <div style={{ 
       width: '100%', 
       height: '100%', 
-      minHeight: '500px', 
+      minHeight: isMobile ? '300px' : '500px',
       display: 'flex', 
       position: 'relative',
-      background: 'transparent' // Let the CSS background image show through
+      background: 'transparent'
     }}>
       <Canvas 
         shadows 
-        camera={{ position: [0, 6, 8], fov: 45 }}
+        camera={cameraProps}
       >
         {/* Transparent background so HTML background shows */}
         <fog attach="fog" args={['#08120b', 12, 35]} />
@@ -385,10 +397,10 @@ export default function ChessBoard({
 
         <OrbitControls 
           enablePan={false}
-          minPolarAngle={Math.PI / 6}
+          minPolarAngle={isMobile ? Math.PI / 8 : Math.PI / 6}
           maxPolarAngle={Math.PI / 2.2}
-          minDistance={6}
-          maxDistance={15}
+          minDistance={isMobile ? 5 : 6}
+          maxDistance={isMobile ? 12 : 15}
         />
 
         <EffectComposer disableNormalPass>
